@@ -1,0 +1,85 @@
+// Java library
+plugins { 
+    id 'java-library'
+}
+
+plugins {
+ id 'maven-publish'
+}
+
+// Package default
+archivesBaseName = 'serpapi'
+version = '2.0.3'
+group = 'com.github.serpapi'
+
+// java version 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+// Load repositories
+repositories {
+    // jcenter()
+    mavenCentral()
+}
+
+// compileTestJava {
+//     options.encoding = 'UTF-8'
+//     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+// }
+
+dependencies {
+    implementation 'com.google.code.gson:gson:2.9.0'
+    
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.3'
+
+    // Mockito
+    testImplementation 'org.mockito:mockito-core:3.6.28'
+
+    // javadoc markdown support doesn't work with modern java and gradle.
+}
+
+// jar file content
+tasks.named('jar') {
+    manifest {
+        attributes('Implementation-Title': project.name,
+                   'Implementation-Version': project.version)
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            pom { // To specify a license in the pom:
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/serpapi/serpapi-java/blob/master/LICENSE'
+                    }
+                }
+            }
+        }
+    }
+}
+
+wrapper {
+    gradleVersion = "7.3.3"
+    distributionType = Wrapper.DistributionType.ALL
+}
