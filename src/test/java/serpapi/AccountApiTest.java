@@ -6,37 +6,25 @@ import org.junit.Test;
 import org.mockito.ArgumentMatchers;
 
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class AccountApiTest {
 
-  @Before
-  public void setUp() throws Exception {
-    if (System.getenv("API_KEY") != null) {
-      GoogleSearch.api_key_default = System.getenv("API_KEY");
-    }
-  }
-
   @Test
-  public void getAccount() throws Exception {
-    String expected_api_key = GoogleSearch.api_key_default;
-
-    // mock response if run on github
-    GoogleSearch client = new GoogleSearch();
+  public void account() throws Exception {
     if (System.getenv("API_KEY") == null) {
-      SerpApiHttp stub = mock(SerpApiHttp.class);
-      String data = ReadJsonFile.readAsString(Paths.get("src/test/java/serpapi/data/account.json"));
-      when(stub.getResults(ArgumentMatchers.<String, String>anyMap())).thenReturn(data);
-      client.client = stub;
-
-      // fallback to default
-      expected_api_key = "demo";
+     return;
     }
 
-    JsonObject info = client.getAccount();
+    Map<String, String> parameter = new HashMap<String, String>();
+    parameter.put("api_key", System.getenv("API_KEY"));
+    SerpApi client = new SerpApi(parameter);
+    JsonObject info = client.account();
     System.out.println(info.toString());
-    assertEquals(expected_api_key, info.getAsJsonObject().get("api_key").getAsString());
+    assertEquals("Active", info.getAsJsonObject().get("account_status").getAsString());
   }
 }

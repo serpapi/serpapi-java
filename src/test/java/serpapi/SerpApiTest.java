@@ -14,30 +14,30 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Test google search results 
+ * Test main class
  */
-public class GoogleSearchTest {
-
-  GoogleSearch search;
-
-  @Before
-  public void setUp() throws Exception {
-    if (System.getenv("API_KEY") != null) {
-      GoogleSearch.api_key_default = System.getenv("API_KEY");
-    }
-  }
+public class SerpApiTest {
 
   @Test
   public void searchCoffee() throws SerpApiException {
     // skip test if no api_key provided
-    if (System.getenv("API_KEY") == null)
+    if(System.getenv("API_KEY") == null)
       return;
 
     Map<String, String> parameter = new HashMap<>();
     parameter.put("q", "Coffee");
+    parameter.put("location", "Austin, Texas, United States");
+    parameter.put("hl", "en");
+    parameter.put("gl", "us");
+    parameter.put("google_domain", "google.com");
+    // parameter.put("api_key", "demo");
+    parameter.put("safe", "active");
+    parameter.put("start", "10");
+    parameter.put("num", "10");
+    parameter.put("device", "desktop");
 
-    GoogleSearch result = new GoogleSearch(parameter);
-    JsonObject results = result.getJson();
+    SerpApi client = new SerpApi(parameter);
+    JsonObject results = client.search(parameter);
     assertTrue(results.getAsJsonArray("organic_results").size() > 5);
   }
 
