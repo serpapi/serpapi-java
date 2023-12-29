@@ -26,7 +26,9 @@ public class SerpApi extends Exception {
   */
   public SerpApiHttp client;
 
-  /* default HTTP client timeout */
+  /** 
+   * default HTTP client timeout 
+   */
   public Integer timeout = 60000;
 
   /***
@@ -36,15 +38,17 @@ public class SerpApi extends Exception {
    */
   public SerpApi(Map<String, String> parameter) {
     this.parameter = parameter;
+    this.client = new SerpApiHttp("/search");
+    this.client.setHttpConnectionTimeout(this.timeout);
   }
 
   /***
-   * Constructor
-   * 
-   * @param parameter default search parameter should include {"api_key": "secret_api_key", "engine": "google" }
+   * Constructor without arguments
    */
   public SerpApi() {
     this.parameter = new HashMap();
+    this.client = new SerpApiHttp("/search");
+    this.client.setHttpConnectionTimeout(this.timeout);
   }
 
   /***
@@ -70,28 +74,27 @@ public class SerpApi extends Exception {
   }
 
   /***
-   * Returns location 
+   * Return location using Location API
    * 
    * @param parameter must include {q: "city", limit: 3}
    * @return JsonObject location using Location API
    * @throws SerpApiException wraps backend error message
    */
-  public JsonObject location(Map<String, String> parameter) throws SerpApiException {
-    return json("/locations.json", parameter);
+  public JsonArray location(Map<String, String> parameter) throws SerpApiException {
+    String content = get("/locations.json", "json", parameter);    
+    JsonElement element = gson.fromJson(content, JsonElement.class);
+    return element.getAsJsonArray();
   }
 
   /***
-   * Get client result from the Client Archive API
+   * Retrieve search result from the Search Archive API
    * 
-   * @param clientID archived client result = client_metadata.id
+   * @param id search unique identifier
    * @return JsonObject client result
    * @throws SerpApiException wraps backend error message
    */
-  public JsonObject searchArchive(String clientID) throws SerpApiException {
-    if(!this.parameter.containsKey("api_key")) {
-      throw new SerpApiException("api_key must be set in the default parameter passed to the constructor!");
-    }
-    return json("/searches/" + clientID + ".json", null);
+  public JsonObject searchArchive(String id) throws SerpApiException {
+    return json("/searches/" + id + ".json", null);
   }
 
   /***
@@ -105,16 +108,14 @@ public class SerpApi extends Exception {
     return json("/account.json", parameter);
   }
 
-
   /***
    * Get account information using Account API
    * 
-   * @param parameter Map including the api_key if not set in the default client parameter
    * @return JsonObject account information
    * @throws SerpApiException wraps backend error message
    */
   public JsonObject account() throws SerpApiException {
-    return json("/account.json", this.parameter);
+    return json("/account.json", null);
   }  
 
     /***
@@ -136,30 +137,34 @@ public class SerpApi extends Exception {
     return this.client;
   }
 
-
- /***
+  /***
    * Build a serp API query by expanding existing parameters
    *
    * @param path backend HTTP path
    * @param output type of output format (json, html, json_with_images)
+   * @param parameter custom search parameter which override the default parameter provided in the constructor
    * @return format parameter hash map
    * @throws SerpApiException wraps backend error message
    */
   public String get(String path, String output, Map<String, String> parameter) throws SerpApiException {
-    // Initialize client if not done
-    if (this.client == null) {
-      this.client = new SerpApiHttp(path);
-      this.client.setHttpConnectionTimeout(this.timeout);
+    // Update path for the client
+    this.client.path = path;
+
+    // create HTTP query
+    Map<String, String> query = new HashMap();
+
+    if (path.startsWith("/searches")) {
+      // Only preserve API_KEY
+      query.put("api_key", this.parameter.get("api_key"));
     } else {
-      this.client.path = path;
+      // Merge default parameter
+      query.putAll(this.parameter);
     }
 
-    Map<String, String> query = new HashMap();
-    // Merge default parameter
-    query.putAll(this.parameter);
-
-    // Merge query parameter
-    query.putAll(parameter);
+    // override default parameter with custom parameter
+    if (parameter != null) {
+      query.putAll(parameter);
+    }
 
     // Set current programming language
     query.put("source", "java");

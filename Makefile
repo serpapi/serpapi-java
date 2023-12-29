@@ -19,11 +19,11 @@ oobt: build
 	$(MAKE) -C demo all
 
 doc:
-	gradle javadoc:javadoc
+	gradle javadoc --info --warning-mode all
 
 # Create a release using GitHub
 release: doc build
 	@echo "drag drop file"
 	open build/libs/
 	open build/distributions/
-	open -a "Google Chrome" https://github.com/serpapi/google-search-results-java/releases
+	open -a "Google Chrome" https://github.com/serpapi/serpapi-java/releases

@@ -8,10 +8,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-// import serpapi.SerpApiException;
-// import serpapi.GoogleSearch;
 import java.util.Map;
 import java.util.HashMap;
+
+import serpapi.SerpApi;
+import serpapi.SerpApiException;
 
 public class App {
     public static void main(String[] args) throws SerpApiException {
@@ -27,14 +28,15 @@ public class App {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("q", "Coffee");
         parameter.put("location", location);
-        parameter.put(GoogleSearch.API_KEY_NAME, args[0]);
+        parameter.put("api_key", args[0]);
 
         // Create search
-        GoogleSearch client = new GoogleSearch(parameter);
+        SerpApi serpapi= new SerpApi(parameter);
 
         try {
-            // Execute search
-            JsonObject data = client.getJson();
+           // Perform search
+           JsonObject data = serpapi.search(parameter);
+           
            // Decode response
            JsonArray results = data.get("local_results").getAsJsonObject().get("places").getAsJsonArray();
            JsonObject first_result = results.get(0).getAsJsonObject();

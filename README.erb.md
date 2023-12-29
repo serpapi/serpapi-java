@@ -1,29 +1,16 @@
-# Google Search Results JAVA API
+# SerpApi Java Library
 
 ![test](https://github.com/serpapi/google-search-results-java/workflows/test/badge.svg)
 
-This Java package enables to scrape and parse Google, Bing and Baidu search results using [SerpApi](https://serpapi.com). Feel free to fork this repository to add more backends.
+Integrate search data into your Java application. This library is the official wrapper for SerpApi (https://serpapi.com).
 
-This project is an implementation of SerpApi in Java 7.
-This code depends on GSON for efficient JSON processing.
-The HTTP response are converted to JSON Object.
-
-An example is provided in the test.
-@see src/test/java/GoogleSearchImplementationTest.java
+SerpApi supports Google, Google Maps, Google Shopping, Baidu, Yandex, Yahoo, eBay, App Stores, and more.
 
 [The full documentation is available here.](https://serpapi.com/search-api)
 
-## Requirements
+## Installation 
 
-Runtime:
- - Java / JDK 8+ (https://www.java.com/en/download/)
-   Older version of java do not support HTTPS protocol. 
-   The SSLv3 is buggy which leads to Java raising this exception: javax.net.ssl.SSLHandshakeException
-
-For development:
- - Gradle 6.7+ (https://gradle.org/install/) 
-
-## Maven / Gradle support
+Using Maven / Gradle.
 
 Edit your build.gradle file
 ```java
@@ -39,9 +26,11 @@ dependencies {
 To list all the version available.
 https://jitpack.io/api/builds/com.github.serpapi/serpapi
 
+or you can download the jar file from https://github.com/serpapi/serpapi-java.git
+
 Note: jitpack.io enables to download maven package directly from github release.
 
-## Quick start
+## Usage
 
 To get started with this project in Java. 
 We provided a fully working example.
@@ -68,17 +57,17 @@ public class App {
         Map<String, String> parameter = new HashMap<>();
         parameter.put("q", "Coffee");
         parameter.put("location", location);
-        parameter.put("apikey", args[0]);
+        parameter.put("api_key", args[0]);
 
         // Create search
         SerpApi serpapi = new SerpApi(parameter);
 
         try {
             // Execute search
-            JsonObject data = search.getJson();
+            JsonObject data = serpapi.search(parameter);
 
             // Decode response
-            JsonArray results = (JsonArray) data.get("local_results");
+            JsonArray results = data.get("local_results").getAsJsonObject().get("places").getAsJsonArray();
             JsonObject first_result = results.get(0).getAsJsonObject();
             System.out.println("first coffee: " + first_result.get("title").getAsString() + " in " + location);
         } catch (SerpApiException e) {
@@ -89,73 +78,92 @@ public class App {
 }
 ```
 
-This example runs a search about "coffee" using your secret api key.
+The [SerpApi.com API Documentation](https://serpapi.com/search-api) contains a list of all the possible parameters that can be passed to the API.
 
-The Serp API service (backend)
- - searches on Google using the query: q = "coffee"
- - parses the messy HTML responses
- - return a standardized JSON response
-The class GoogleSearch
- - Format the request to Serp API server
- - Execute GET http request
- - Parse JSON into Ruby Hash using JSON standard library provided by Ruby
-Et voila..
 
-Alternatively, you can search:
- - Bing using BingSearch class
- - Baidu using BaiduSearch class
+## Documentation
 
-See the playground to generate your code.
- https://serpapi.com/playground
+Documentation is [available on Read the Docs](https://serpapi-python.readthedocs.io/en/latest/).
 
-## Example
- * [How to set SERP API key](#how-to-set-serp-api-key)
- * [Search API capability](#search-api-capability)
- * [Example by specification](#example-by-specification)
- * [Location API](#location-api)
- * [Search Archive API](#search-archive-api)
- * [Account API](#account-api)
+## Requirements
 
-## How to set SERP API key
-The Serp API key can be set globally using a singleton pattern.
-```java
-GoogleSearch.serp_api_key_default = "Your Private Key"
-search = GoogleSearch(parameter)
-```
-Or the Serp API key can be provided for each query.
+This project is an implementation of SerpApi in Java 7.
+This code depends on GSON for efficient JSON processing.
+The HTTP response are converted to JSON Object.
+
+An example is provided in the test.
+@see src/test/java/SerpApiImplementationTest.java
+
+Runtime:
+ - Java / JDK 8+ (https://www.java.com/en/download/)
+   Older version of java do not support HTTPS protocol. 
+   The SSLv3 is buggy which leads to Java raising this exception: javax.net.ssl.SSLHandshakeException
+
+For development:
+ - Gradle 6.7+ (https://gradle.org/install/) 
+
+
+### Location API
 
 ```java
-search = GoogleSearch(parameter, "Your Private Key")
+Map<String, String> parameter = new HashMap<String, String>();
+parameter.put("api_key", System.getenv("API_KEY"));
+SerpApi serpapi = new SerpApi(parameter);
+
+parameter.put("q", "Austin");
+parameter.put("limit", "3");
+JsonArray location = serpapi.location(parameter);
+System.out.println(location.toString());
 ```
+it prints the first 3 location matching Austin (Texas, Texas, Rochester)
 
-## Example with all params and all outputs
+### Search Archive API
 
+Let's run a search to get a search_id.
 ```java
-query_parameter = {
-  "q": "query",
-  "google_domain": "Google Domain",
-  "location": "Location Requested",
-  "device": device,
-  "hl": "Google UI Language",
-  "gl": "Google Country",
-  "safe": "Safe Search Flag",
-  "num": "Number of Results",
-  "start": "Pagination Offset",
-  "serp_api_key": "Your SERP API Key",
-  "tbm": "nws|isch|shop",
-  "tbs": "custom to be search criteria",
-  "async": true|false,    // allow async request - non-blocker
-  "output": "json|html",  // output format
-}
+Map<String, String> parameter = new HashMap<>();
+parameter.put("api_key", System.getenv("API_KEY"));
+parameter.put("q", "Coffee");
+parameter.put("location", "Austin, Texas, United States");
+parameter.put("hl", "en");
+parameter.put("gl", "us");
+parameter.put("google_domain", "google.com");
+parameter.put("safe", "active");
+parameter.put("start", "10");
+parameter.put("num", "10");
+parameter.put("device", "desktop");
 
-query = GoogleSearch.new(query_parameter)
-query.parameter.put("location", "Austin,Texas")
+SerpApi serpapi = new SerpApi(parameter);
+JsonObject results = serpapi.search(parameter);
 
-String html_results = query.getHtml()
-JsonObject json_results = query.getJson()
+
+
 ```
 
-### Example by specification
+Now let retrieve the previous search from the archive.
+```java
+// now search in the archive
+String id = results.getAsJsonObject("search_metadata").getAsJsonPrimitive("id").getAsString();
+
+// retrieve search from the archive with speed for free
+JsonObject archive = serpapi.searchArchive(id);
+System.out.println(archive.toString());
+```
+it prints the search from the archive which matches 1:1 to previous search results.
+
+### Account API
+Get account API
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+JsonObject account = serpapi.account();
+System.out.println(account.toString());
+```
+it prints your account information.
+
+### Contributing
 
 We love true open source, continuous integration and Test Drive Development (TDD). 
  We are using RSpec to test [our infrastructure around the clock](https://travis-ci.org/serpapi/google-search-results-ruby) to achieve the best QoS (Quality Of Service).
@@ -165,49 +173,7 @@ The directory test/ includes specification/examples.
 To run the test:
 ```gradle test```
 
-
-### Location API
-
-```java
-GoogleSearch search = new GoogleSearch(new HashMap<String, String());
-JsonArray locationList = search.getLocation("Austin", 3);
-System.out.println(locationList.toString());
-```
-it prints the first 3 location matching Austin (Texas, Texas, Rochester)
-
-### Search Archive API
-
-Let's run a search to get a search_id.
-```java
-Map<String, String> parameter = new HashMap<>();
-parameter.put("q", "Coffee");
-parameter.put("location", "Austin,Texas");
-
-GoogleSearch search = new GoogleSearch(parameter);
-JsonObject result = search.getJson();
-int search_id = result.get("search_metadata").getAsJsonObject().get("id").getAsInt();
-```
-
-Now let retrieve the previous search from the archive.
-```java
-JsonObject archived_result = search.getSearchArchive(search_id);
-System.out.println(archived_result.toString());
-```
-it prints the search from the archive.
-
-### Account API
-Get account API
-```java
-GoogleSearch.serp_api_key_default = "Your Private Key"
-GoogleSearch search = new GoogleSearch();
-JsonObject info = search.getAccount();
-System.out.println(info.toString());
-```
-it prints your account information.
-
-## Build project
-
-### How to build from the source ?
+#### How to build from the source ?
 
 You must clone this repository.
 ```bash
@@ -222,29 +188,8 @@ Copy the jar to your project lib/ directory.
 cp build/libs/serpapi-java.jar path/to/yourproject/lib
 ```
 
-### How to test ?
-
-```bash
-make test
-```
-
-### Conclusion
-
-This service supports Google Images, News, Shopping.
-To enable a type of search, the field tbm (to be matched) must be set to:
-
- * isch: Google Images API.
- * nws: Google News API.
- * shop: Google Shopping API.
- * any other Google service should work out of the box.
- * (no tbm parameter): regular Google Search.
-
-[The full documentation is available here.](https://serpapi.com/search-api)
-
-Issue
----
+## Java limitation
 ### SSL handshake error.
-
 #### symptom
 
 javax.net.ssl.SSLHandshakeException
@@ -263,15 +208,13 @@ java -version
 
  * On Windows manually upgrade your JDK / JVM to the latest.
 
-Changelog
----
-- 1.0.0 - Fully revisit API naming convention, and generalize client usage to match serpapi.com latest development
-
-Source
----
+### Inspiration
  * http://www.baeldung.com/java-http-request
  * https://github.com/google/gson
+ 
+## License
+MIT license
 
-Author
----
-Victor Benarbia - victor@serpapi.com
+## Changelog
+- 1.0.0 - Fully revisit API naming convention, and generalize client usage to match serpapi.com latest development
+
