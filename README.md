@@ -1,3 +1,4 @@
+
 # SerpApi Java Library
 
 ![test](https://github.com/serpapi/serpapi-java/workflows/test/badge.svg)
@@ -162,6 +163,397 @@ JsonObject account = serpapi.account();
 System.out.println(account.toString());
 ```
 it prints your account information.
+
+## Examples in java
+
+### Search bing
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "bing");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/BingTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/BingTest.java)
+see: [https://serpapi.com/bing-search-api](https://serpapi.com/bing-search-api)
+
+### Search baidu
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "baidu");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/BaiduTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/BaiduTest.java)
+see: [https://serpapi.com/baidu-search-api](https://serpapi.com/baidu-search-api)
+
+### Search yahoo
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "yahoo");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("p", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/YahooTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/YahooTest.java)
+see: [https://serpapi.com/yahoo-search-api](https://serpapi.com/yahoo-search-api)
+
+### Search youtube
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "youtube");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("search_query", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/YoutubeTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/YoutubeTest.java)
+see: [https://serpapi.com/youtube-search-api](https://serpapi.com/youtube-search-api)
+
+### Search walmart
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "walmart");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("query", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/WalmartTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/WalmartTest.java)
+see: [https://serpapi.com/walmart-search-api](https://serpapi.com/walmart-search-api)
+
+### Search ebay
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "ebay");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("_nkw", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/EbayTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/EbayTest.java)
+see: [https://serpapi.com/ebay-search-api](https://serpapi.com/ebay-search-api)
+
+### Search naver
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "naver");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("query", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/NaverTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/NaverTest.java)
+see: [https://serpapi.com/naver-search-api](https://serpapi.com/naver-search-api)
+
+### Search home depot
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "home_depot");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "table");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/HomeDepotTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/HomeDepotTest.java)
+see: [https://serpapi.com/home-depot-search-api](https://serpapi.com/home-depot-search-api)
+
+### Search apple app store
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "apple_app_store");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("term", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/AppleAppStoreTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/AppleAppStoreTest.java)
+see: [https://serpapi.com/apple-app-store](https://serpapi.com/apple-app-store)
+
+### Search duckduckgo
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "duckduckgo");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/DuckduckgoTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/DuckduckgoTest.java)
+see: [https://serpapi.com/duckduckgo-search-api](https://serpapi.com/duckduckgo-search-api)
+
+### Search google
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "coffee");
+parameter.put("engine", "google");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/GoogleTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/GoogleTest.java)
+see: [https://serpapi.com/search-api](https://serpapi.com/search-api)
+
+### Search google scholar
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_scholar");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/GoogleScholarTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/GoogleScholarTest.java)
+see: [https://serpapi.com/google-scholar-api](https://serpapi.com/google-scholar-api)
+
+### Search google autocomplete
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_autocomplete");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/GoogleAutocompleteTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/GoogleAutocompleteTest.java)
+see: [https://serpapi.com/google-autocomplete-api](https://serpapi.com/google-autocomplete-api)
+
+### Search google product
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_product");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "coffee");
+parameter.put("product_id", "4887235756540435899");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/GoogleProductTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/GoogleProductTest.java)
+see: [https://serpapi.com/google-product-api](https://serpapi.com/google-product-api)
+
+### Search google reverse image
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_reverse_image");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("image_url", "https://i.imgur.com/5bGzZi7.jpg");
+parameter.put("max_results", "1");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/GoogleReverseImageTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/GoogleReverseImageTest.java)
+see: [https://serpapi.com/google-reverse-image](https://serpapi.com/google-reverse-image)
+
+### Search google events
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_events");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/GoogleEventsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/GoogleEventsTest.java)
+see: [https://serpapi.com/google-events-api](https://serpapi.com/google-events-api)
+
+### Search google local services
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_local_services");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "electrician");
+parameter.put("data_cid", "6745062158417646970");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/GoogleLocalServicesTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/GoogleLocalServicesTest.java)
+see: [https://serpapi.com/google-local-services-api](https://serpapi.com/google-local-services-api)
+
+### Search google maps
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_maps");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "pizza");
+parameter.put("ll", "@40.7455096,-74.0083012,15.1z");
+parameter.put("type", "search");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/GoogleMapsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/GoogleMapsTest.java)
+see: [https://serpapi.com/google-maps-api](https://serpapi.com/google-maps-api)
+
+### Search google jobs
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_jobs");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/GoogleJobsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/GoogleJobsTest.java)
+see: [https://serpapi.com/google-jobs-api](https://serpapi.com/google-jobs-api)
+
+### Search google play
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_play");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("q", "kite");
+parameter.put("store", "apps");
+parameter.put("max_results", "2");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/GooglePlayTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/GooglePlayTest.java)
+see: [https://serpapi.com/google-play-api](https://serpapi.com/google-play-api)
+
+### Search google images
+```java
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_images");
+parameter.put("api_key", "your_api_key");
+
+SerpApi serpapi = new SerpApi(parameter);
+
+// set search parameter
+parameter.put("engine", "google_images");
+parameter.put("tbm", "isch");
+parameter.put("q", "coffee");
+
+JsonObject results = serpapi.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/GoogleImagesTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/GoogleImagesTest.java)
+see: [https://serpapi.com/images-results](https://serpapi.com/images-results)
+
 
 ### Contributing
 

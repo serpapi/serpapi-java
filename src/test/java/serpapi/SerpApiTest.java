@@ -2,16 +2,12 @@ package serpapi;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatchers;
 
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 /**
  * Test main class
