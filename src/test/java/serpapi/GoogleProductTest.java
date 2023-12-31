@@ -14,25 +14,26 @@ import static org.junit.Assert.*;
  */
 public class GoogleProductTest {
 
-  @Test
-  public void search() throws SerpApiException {
-    // skip test if no api_key provided
-    if(System.getenv("API_KEY") == null)
-      return;
+  // TODO wait on https://github.com/serpapi/SerpApi/issues/4432
 
-    // set search context
-    Map<String, String> parameter = new HashMap<>();
-    parameter.put("engine", "google_product");
-    parameter.put("api_key", System.getenv("API_KEY"));
+  // @Test
+  // public void search() throws SerpApiException {
+  //   // skip test if no api_key provided
+  //   if(System.getenv("API_KEY") == null)
+  //     return;
 
-    SerpApi serpapi = new SerpApi(parameter);
+  //   // setup serpapi client
+  //   Map<String, String> auth = new HashMap<>();
+  //   auth.put("api_key", System.getenv("API_KEY"));
+  //   SerpApi client = new SerpApi(auth);
 
-    // set search parameter
-parameter.put("q", "coffee");
-parameter.put("product_id", "4887235756540435899");
-
-    JsonObject results = serpapi.search(parameter);
-    assertTrue(results.getAsJsonArray("product_results").size() > 5);
-  }
+  //   // run search
+  //   Map<String, String> parameter = new HashMap<>();
+  //   parameter.put("engine", "google_product");
+  //   parameter.put("q", "coffee");
+  //   parameter.put("product_id", "4887235756540435899");
+  //   JsonObject results = client.search(parameter);
+  //   assertTrue(results.getAsJsonArray("product_results").size() > 5);
+  // }
 
 }

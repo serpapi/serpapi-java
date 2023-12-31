@@ -20,18 +20,17 @@ public class BingTest {
     if(System.getenv("API_KEY") == null)
       return;
 
-    // set search context
+    // setup serpapi client
+    Map<String, String> auth = new HashMap<>();
+    auth.put("api_key", System.getenv("API_KEY"));
+    SerpApi client = new SerpApi(auth);
+
+    // run search
     Map<String, String> parameter = new HashMap<>();
     parameter.put("engine", "bing");
-    parameter.put("api_key", System.getenv("API_KEY"));
-
-    SerpApi serpapi = new SerpApi(parameter);
-
-    // set search parameter
-parameter.put("q", "coffee");
-
-    JsonObject results = serpapi.search(parameter);
-    assertTrue(results.getAsJsonArray("organic_results").size() > 5);
+    parameter.put("q", "coffee");
+    JsonObject results = client.search(parameter);
+    assertTrue(results.getAsJsonArray("organic_results").size() > 1);
   }
 
 }

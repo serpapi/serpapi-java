@@ -20,19 +20,18 @@ public class GoogleMapsTest {
     if(System.getenv("API_KEY") == null)
       return;
 
-    // set search context
+    // setup serpapi client
+    Map<String, String> auth = new HashMap<>();
+    auth.put("api_key", System.getenv("API_KEY"));
+    SerpApi client = new SerpApi(auth);
+
+    // run search
     Map<String, String> parameter = new HashMap<>();
     parameter.put("engine", "google_maps");
-    parameter.put("api_key", System.getenv("API_KEY"));
-
-    SerpApi serpapi = new SerpApi(parameter);
-
-    // set search parameter
-parameter.put("q", "pizza");
-parameter.put("ll", "@40.7455096,-74.0083012,15.1z");
-parameter.put("type", "search");
-
-    JsonObject results = serpapi.search(parameter);
+    parameter.put("q", "pizza");
+    parameter.put("ll", "@40.7455096,-74.0083012,15.1z");
+    parameter.put("type", "search");
+    JsonObject results = client.search(parameter);
     assertTrue(results.getAsJsonArray("local_results").size() > 5);
   }
 
