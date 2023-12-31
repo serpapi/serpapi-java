@@ -1,7 +1,7 @@
 
 # SerpApi Java Library
 
-![test](https://github.com/serpapi/serpapi-java/workflows/test/badge.svg)
+[![serpapi-java](https://github.com/serpapi/serpapi-java/actions/workflows/gradle.yml/badge.svg)](https://github.com/serpapi/serpapi-java/actions/workflows/gradle.yml)
 [![](https://jitpack.io/v/serpapi/serpapi-java.svg)](https://jitpack.io/#serpapi/serpapi-java)
 
 Integrate search data into your Java application. This library is the official wrapper for SerpApi (https://serpapi.com).
