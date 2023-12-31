@@ -19,15 +19,13 @@ public class LocationApiTest {
   public void location() throws Exception {
     if(System.getenv("API_KEY") == null)
       return;
-    // mock response if run on github
-    Map<String, String> parameter = new HashMap<String, String>();
-    parameter.put("api_key", System.getenv("API_KEY"));
-    SerpApi serpapi = new SerpApi(parameter);
 
+    SerpApi serpapi = new SerpApi();
+
+    Map<String, String> parameter = new HashMap<String, String>();
     parameter.put("q", "Austin");
     parameter.put("limit", "3");
     JsonArray location = serpapi.location(parameter);
-    System.out.println(location.toString());
     assertEquals("Austin, TX", location.get(0).getAsJsonObject().get("name").getAsString());
   }
 }

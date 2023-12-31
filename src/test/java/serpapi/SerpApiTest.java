@@ -20,8 +20,11 @@ public class SerpApiTest {
     if(System.getenv("API_KEY") == null)
       return;
 
+    Map<String, String> auth = new HashMap<>();
+    auth.put("api_key", System.getenv("API_KEY"));
+    SerpApi serpapi = new SerpApi(auth);
+
     Map<String, String> parameter = new HashMap<>();
-    parameter.put("api_key", System.getenv("API_KEY"));
     parameter.put("q", "Coffee");
     parameter.put("location", "Austin, Texas, United States");
     parameter.put("hl", "en");
@@ -32,7 +35,6 @@ public class SerpApiTest {
     parameter.put("num", "10");
     parameter.put("device", "desktop");
 
-    SerpApi serpapi = new SerpApi(parameter);
     JsonObject results = serpapi.search(parameter);
     assertTrue(results.getAsJsonArray("organic_results").size() > 5);
   }

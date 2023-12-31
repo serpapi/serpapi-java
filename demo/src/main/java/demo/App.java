@@ -24,14 +24,16 @@ public class App {
         String location = "Austin,Texas";
         System.out.println("find the first Coffee in " + location);
 
-        // parameters
+        // set api_key provided by the command line
+        Map<String, String> auth = new HashMap<>();
+        auth.put("api_key", args[0]);
+
+        // Create search
+        SerpApi serpapi= new SerpApi(auth);
+
         Map<String, String> parameter = new HashMap<>();
         parameter.put("q", "Coffee");
         parameter.put("location", location);
-        parameter.put("api_key", args[0]);
-
-        // Create search
-        SerpApi serpapi= new SerpApi(parameter);
 
         try {
            // Perform search

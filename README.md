@@ -1,7 +1,8 @@
 
 # SerpApi Java Library
 
-![test](https://github.com/serpapi/serpapi-java/workflows/test/badge.svg) [![](https://jitpack.io/v/serpapi/serpapi-java.svg)](https://jitpack.io/#serpapi/serpapi-java)
+![test](https://github.com/serpapi/serpapi-java/workflows/test/badge.svg)
+[![](https://jitpack.io/v/serpapi/serpapi-java.svg)](https://jitpack.io/#serpapi/serpapi-java)
 
 Integrate search data into your Java application. This library is the official wrapper for SerpApi (https://serpapi.com).
 
@@ -54,23 +55,25 @@ public class App {
         String location = "Austin,Texas";
         System.out.println("find the first Coffee in " + location);
 
-        // parameters
+        // set api_key provided by the command line
+        Map<String, String> auth = new HashMap<>();
+        auth.put("api_key", args[0]);
+
+        // Create search
+        SerpApi serpapi= new SerpApi(auth);
+
         Map<String, String> parameter = new HashMap<>();
         parameter.put("q", "Coffee");
         parameter.put("location", location);
-        parameter.put("api_key", args[0]);
-
-        // Create search
-        SerpApi serpapi = new SerpApi(parameter);
 
         try {
-            // Execute search
-            JsonObject data = serpapi.search(parameter);
-
-            // Decode response
-            JsonArray results = data.get("local_results").getAsJsonObject().get("places").getAsJsonArray();
-            JsonObject first_result = results.get(0).getAsJsonObject();
-            System.out.println("first coffee: " + first_result.get("title").getAsString() + " in " + location);
+           // Perform search
+           JsonObject data = serpapi.search(parameter);
+           
+           // Decode response
+           JsonArray results = data.get("local_results").getAsJsonObject().get("places").getAsJsonArray();
+           JsonObject first_result = results.get(0).getAsJsonObject();
+           System.out.println("first coffee shop: " + first_result.get("title").getAsString() + " found on Google in " + location);
         } catch (SerpApiException e) {
             System.out.println("oops exception detected!");
             e.printStackTrace();
@@ -92,38 +95,38 @@ This project is an implementation of SerpApi in Java 7.
 This code depends on GSON for efficient JSON processing.
 The HTTP response are converted to JSON Object.
 
-An example is provided in the test.
-@see src/test/java/SerpApiImplementationTest.java
-
 Runtime:
  - Java / JDK 8+ (https://www.java.com/en/download/)
    Older version of java do not support HTTPS protocol. 
    The SSLv3 is buggy which leads to Java raising this exception: javax.net.ssl.SSLHandshakeException
 
 For development:
- - Gradle 6.7+ (https://gradle.org/install/) 
+ - Gradle 7.7+ (https://gradle.org/install/) 
 
 
 ### Location API
-
 ```java
-Map<String, String> parameter = new HashMap<String, String>();
-parameter.put("api_key", System.getenv("API_KEY"));
-SerpApi serpapi = new SerpApi(parameter);
+SerpApi serpapi = new SerpApi();
 
+Map<String, String> parameter = new HashMap<String, String>();
 parameter.put("q", "Austin");
 parameter.put("limit", "3");
 JsonArray location = serpapi.location(parameter);
-System.out.println(location.toString());
+assertEquals("Austin, TX", location.get(0).getAsJsonObject().get("name").getAsString());
 ```
 it prints the first 3 location matching Austin (Texas, Texas, Rochester)
+
+[/src/test/java/serpapi/LocationApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/LocationApiTest.java)
 
 ### Search Archive API
 
 Let's run a search to get a search_id.
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", System.getenv("API_KEY"));
+SerpApi serpapi = new SerpApi(auth);
+
 Map<String, String> parameter = new HashMap<>();
-parameter.put("api_key", System.getenv("API_KEY"));
 parameter.put("q", "Coffee");
 parameter.put("location", "Austin, Texas, United States");
 parameter.put("hl", "en");
@@ -133,12 +136,7 @@ parameter.put("safe", "active");
 parameter.put("start", "10");
 parameter.put("num", "10");
 parameter.put("device", "desktop");
-
-SerpApi serpapi = new SerpApi(parameter);
 JsonObject results = serpapi.search(parameter);
-
-
-
 ```
 
 Now let retrieve the previous search from the archive.
@@ -152,6 +150,8 @@ System.out.println(archive.toString());
 ```
 it prints the search from the archive which matches 1:1 to previous search results.
 
+[/src/test/java/serpapi/SerpApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/SerpApiTest.java)
+
 ### Account API
 Get account API
 ```java
@@ -164,20 +164,21 @@ System.out.println(account.toString());
 ```
 it prints your account information.
 
+[/src/test/java/serpapi/AccountApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/AccountApiTest.java)
+
 ## Examples in java
 
 ### Search bing
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "bing");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -186,16 +187,15 @@ see: [https://serpapi.com/bing-search-api](https://serpapi.com/bing-search-api)
 
 ### Search baidu
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "baidu");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -204,16 +204,15 @@ see: [https://serpapi.com/baidu-search-api](https://serpapi.com/baidu-search-api
 
 ### Search yahoo
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "yahoo");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("p", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -222,16 +221,15 @@ see: [https://serpapi.com/yahoo-search-api](https://serpapi.com/yahoo-search-api
 
 ### Search youtube
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "youtube");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("search_query", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -240,16 +238,15 @@ see: [https://serpapi.com/youtube-search-api](https://serpapi.com/youtube-search
 
 ### Search walmart
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "walmart");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("query", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -258,16 +255,15 @@ see: [https://serpapi.com/walmart-search-api](https://serpapi.com/walmart-search
 
 ### Search ebay
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "ebay");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("_nkw", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -276,16 +272,15 @@ see: [https://serpapi.com/ebay-search-api](https://serpapi.com/ebay-search-api)
 
 ### Search naver
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "naver");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("query", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -294,16 +289,15 @@ see: [https://serpapi.com/naver-search-api](https://serpapi.com/naver-search-api
 
 ### Search home depot
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "home_depot");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "table");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -312,16 +306,15 @@ see: [https://serpapi.com/home-depot-search-api](https://serpapi.com/home-depot-
 
 ### Search apple app store
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "apple_app_store");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("term", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -330,16 +323,15 @@ see: [https://serpapi.com/apple-app-store](https://serpapi.com/apple-app-store)
 
 ### Search duckduckgo
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "duckduckgo");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -348,17 +340,16 @@ see: [https://serpapi.com/duckduckgo-search-api](https://serpapi.com/duckduckgo-
 
 ### Search google
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "google");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "coffee");
 parameter.put("engine", "google");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -367,16 +358,15 @@ see: [https://serpapi.com/search-api](https://serpapi.com/search-api)
 
 ### Search google scholar
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "google_scholar");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -385,16 +375,15 @@ see: [https://serpapi.com/google-scholar-api](https://serpapi.com/google-scholar
 
 ### Search google autocomplete
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "google_autocomplete");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -403,17 +392,18 @@ see: [https://serpapi.com/google-autocomplete-api](https://serpapi.com/google-au
 
 ### Search google product
 ```java
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "google_product");
-parameter.put("api_key", "your_api_key");
 
-SerpApi serpapi = new SerpApi(parameter);
+  //   // setup serpapi client
+  //   Map<String, String> auth = new HashMap<>();
+  //   auth.put("api_key", "your_api_key");
+  //   SerpApi client = new SerpApi(auth);
 
-// set search parameter
-parameter.put("q", "coffee");
-parameter.put("product_id", "4887235756540435899");
-
-JsonObject results = serpapi.search(parameter);
+  //   // run search
+  //   Map<String, String> parameter = new HashMap<>();
+  //   parameter.put("engine", "google_product");
+  //   parameter.put("q", "coffee");
+  //   parameter.put("product_id", "4887235756540435899");
+  //   JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -422,17 +412,15 @@ see: [https://serpapi.com/google-product-api](https://serpapi.com/google-product
 
 ### Search google reverse image
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "google_reverse_image");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("image_url", "https://i.imgur.com/5bGzZi7.jpg");
-parameter.put("max_results", "1");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -441,16 +429,15 @@ see: [https://serpapi.com/google-reverse-image](https://serpapi.com/google-rever
 
 ### Search google events
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "google_events");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -459,17 +446,16 @@ see: [https://serpapi.com/google-events-api](https://serpapi.com/google-events-a
 
 ### Search google local services
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "google_local_services");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "electrician");
 parameter.put("data_cid", "6745062158417646970");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -478,18 +464,17 @@ see: [https://serpapi.com/google-local-services-api](https://serpapi.com/google-
 
 ### Search google maps
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "google_maps");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "pizza");
 parameter.put("ll", "@40.7455096,-74.0083012,15.1z");
 parameter.put("type", "search");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -498,16 +483,15 @@ see: [https://serpapi.com/google-maps-api](https://serpapi.com/google-maps-api)
 
 ### Search google jobs
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "google_jobs");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -516,18 +500,16 @@ see: [https://serpapi.com/google-jobs-api](https://serpapi.com/google-jobs-api)
 
 ### Search google play
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "google_play");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("q", "kite");
 parameter.put("store", "apps");
-parameter.put("max_results", "2");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
@@ -536,18 +518,17 @@ see: [https://serpapi.com/google-play-api](https://serpapi.com/google-play-api)
 
 ### Search google images
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "google_images");
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-// set search parameter
 parameter.put("engine", "google_images");
 parameter.put("tbm", "isch");
 parameter.put("q", "coffee");
-
-JsonObject results = serpapi.search(parameter);
+JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 

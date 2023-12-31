@@ -67,23 +67,25 @@ public class App {
         String location = "Austin,Texas";
         System.out.println("find the first Coffee in " + location);
 
-        // parameters
+        // set api_key provided by the command line
+        Map<String, String> auth = new HashMap<>();
+        auth.put("api_key", args[0]);
+
+        // Create search
+        SerpApi serpapi= new SerpApi(auth);
+
         Map<String, String> parameter = new HashMap<>();
         parameter.put("q", "Coffee");
         parameter.put("location", location);
-        parameter.put("api_key", args[0]);
-
-        // Create search
-        SerpApi serpapi = new SerpApi(parameter);
 
         try {
-            // Execute search
-            JsonObject data = serpapi.search(parameter);
-
-            // Decode response
-            JsonArray results = data.get("local_results").getAsJsonObject().get("places").getAsJsonArray();
-            JsonObject first_result = results.get(0).getAsJsonObject();
-            System.out.println("first coffee: " + first_result.get("title").getAsString() + " in " + location);
+           // Perform search
+           JsonObject data = serpapi.search(parameter);
+           
+           // Decode response
+           JsonArray results = data.get("local_results").getAsJsonObject().get("places").getAsJsonArray();
+           JsonObject first_result = results.get(0).getAsJsonObject();
+           System.out.println("first coffee shop: " + first_result.get("title").getAsString() + " found on Google in " + location);
         } catch (SerpApiException e) {
             System.out.println("oops exception detected!");
             e.printStackTrace();
@@ -105,38 +107,38 @@ This project is an implementation of SerpApi in Java 7.
 This code depends on GSON for efficient JSON processing.
 The HTTP response are converted to JSON Object.
 
-An example is provided in the test.
-@see src/test/java/SerpApiImplementationTest.java
-
 Runtime:
  - Java / JDK 8+ (https://www.java.com/en/download/)
    Older version of java do not support HTTPS protocol. 
    The SSLv3 is buggy which leads to Java raising this exception: javax.net.ssl.SSLHandshakeException
 
 For development:
- - Gradle 6.7+ (https://gradle.org/install/) 
+ - Gradle 7.7+ (https://gradle.org/install/) 
 
 
 ### Location API
-
 ```java
-Map<String, String> parameter = new HashMap<String, String>();
-parameter.put("api_key", System.getenv("API_KEY"));
-SerpApi serpapi = new SerpApi(parameter);
+SerpApi serpapi = new SerpApi();
 
+Map<String, String> parameter = new HashMap<String, String>();
 parameter.put("q", "Austin");
 parameter.put("limit", "3");
 JsonArray location = serpapi.location(parameter);
-System.out.println(location.toString());
+assertEquals("Austin, TX", location.get(0).getAsJsonObject().get("name").getAsString());
 ```
 it prints the first 3 location matching Austin (Texas, Texas, Rochester)
+
+[/src/test/java/serpapi/LocationApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/LocationApiTest.java)
 
 ### Search Archive API
 
 Let's run a search to get a search_id.
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", System.getenv("API_KEY"));
+SerpApi serpapi = new SerpApi(auth);
+
 Map<String, String> parameter = new HashMap<>();
-parameter.put("api_key", System.getenv("API_KEY"));
 parameter.put("q", "Coffee");
 parameter.put("location", "Austin, Texas, United States");
 parameter.put("hl", "en");
@@ -146,12 +148,7 @@ parameter.put("safe", "active");
 parameter.put("start", "10");
 parameter.put("num", "10");
 parameter.put("device", "desktop");
-
-SerpApi serpapi = new SerpApi(parameter);
 JsonObject results = serpapi.search(parameter);
-
-
-
 ```
 
 Now let retrieve the previous search from the archive.
@@ -165,6 +162,8 @@ System.out.println(archive.toString());
 ```
 it prints the search from the archive which matches 1:1 to previous search results.
 
+[/src/test/java/serpapi/SerpApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/SerpApiTest.java)
+
 ### Account API
 Get account API
 ```java
@@ -176,6 +175,8 @@ JsonObject account = serpapi.account();
 System.out.println(account.toString());
 ```
 it prints your account information.
+
+[/src/test/java/serpapi/AccountApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/AccountApiTest.java)
 
 ## Examples in java
 
