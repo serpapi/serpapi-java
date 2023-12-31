@@ -11,8 +11,7 @@ test:
 	./gradlew test --info
 
 build: clean
-# ./gradlew build -x test
-	./gradlew build publishToMavenLocal
+	./gradlew build publishToMavenLocal -x test
 	@echo "see build/lib"
 
 oobt: build
