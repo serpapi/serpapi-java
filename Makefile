@@ -1,10 +1,15 @@
 .PHONY: build
 
-all: clean build test readme doc
+all: clean init build test readme doc
 
 # clean
 clean:
 	./gradlew clean
+
+# Initialize gradle wrapper
+init:
+	gradle wrapper
+	chmod +x ./gradlew
 
 # Run gradle test with information
 test:
