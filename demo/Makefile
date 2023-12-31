@@ -6,7 +6,7 @@ else
 $(info "found API_KEY variable")
 endif
 
-all: init clean dep build run
+all: init clean build run
 
 init:
 	gradle wrapper
@@ -15,6 +15,7 @@ init:
 clean:
 	./gradlew clean
 	
+# optional step if building from local source instead of downloading jar file form jitpack.io
 dep:
 	$(MAKE) -C ../ build
 	rm -rf libs
