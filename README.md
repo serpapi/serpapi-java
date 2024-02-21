@@ -39,7 +39,7 @@ We provided a fully working example.
 ```bash
 git clone https://github.com/serpapi/serpapi-java.git
 cd serpapi-java/demo
-make run api_key=<your private key>
+make all API_KEY=<your private key>
 ```
 Note: You need an account with SerpApi to obtain this key from: https://serpapi.com/dashboard
 
