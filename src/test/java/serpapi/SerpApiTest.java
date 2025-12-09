@@ -32,7 +32,6 @@ public class SerpApiTest {
     parameter.put("google_domain", "google.com");
     parameter.put("safe", "active");
     parameter.put("start", "10");
-    parameter.put("num", "10");
     parameter.put("device", "desktop");
 
     JsonObject results = serpapi.search(parameter);
@@ -54,7 +53,6 @@ public class SerpApiTest {
     parameter.put("google_domain", "google.com");
     parameter.put("safe", "active");
     parameter.put("start", "10");
-    parameter.put("num", "10");
     parameter.put("device", "desktop");
 
     SerpApi serpapi = new SerpApi(parameter);
