@@ -2,6 +2,9 @@
 def snippet(format, path) 
  lines = File.new(path).readlines
 stop = lines.find_index { |line| line =~ /assertTrue/}
+if stop.nil?
+    raise "No assertTrue found in #{path}"
+end
 slice = File.new(path).readlines[23..stop-1]
 slice << "System.out.println(results.toString());"
 buf = slice.map { |l| l.gsub(/(^\s\s\s\s)/, '')}.join
@@ -33,14 +36,14 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.serpapi:serpapi-java:1.0.0'
+    implementation 'com.github.serpapi:serpapi-java:1.1.0'
 }
 ```
 
 To list all the version available.
 https://jitpack.io/api/builds/com.github.serpapi/serpapi-java
 
-or you can download the jar file from https://github.com/serpapi/serpapi-java.git
+or you can download the jar file from https://github.com/serpapi/serpapi-java/releases
 
 Note: jitpack.io enables to download maven package directly from github release.
 
@@ -180,87 +183,83 @@ it prints your account information.
 ## Examples in java
 
 ### Search bing
-<%= snippet('java', 'src/test/java/serpapi/BingTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/BingTest.java') %>
 see: [https://serpapi.com/bing-search-api](https://serpapi.com/bing-search-api)
 
 ### Search baidu
-<%= snippet('java', 'src/test/java/serpapi/BaiduTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/BaiduTest.java') %>
 see: [https://serpapi.com/baidu-search-api](https://serpapi.com/baidu-search-api)
 
 ### Search yahoo
-<%= snippet('java', 'src/test/java/serpapi/YahooTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/YahooTest.java') %>
 see: [https://serpapi.com/yahoo-search-api](https://serpapi.com/yahoo-search-api)
 
 ### Search youtube
-<%= snippet('java', 'src/test/java/serpapi/YoutubeTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/YoutubeTest.java') %>
 see: [https://serpapi.com/youtube-search-api](https://serpapi.com/youtube-search-api)
 
 ### Search walmart
-<%= snippet('java', 'src/test/java/serpapi/WalmartTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/WalmartTest.java') %>
 see: [https://serpapi.com/walmart-search-api](https://serpapi.com/walmart-search-api)
 
 ### Search ebay
-<%= snippet('java', 'src/test/java/serpapi/EbayTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/EbayTest.java') %>
 see: [https://serpapi.com/ebay-search-api](https://serpapi.com/ebay-search-api)
 
 ### Search naver
-<%= snippet('java', 'src/test/java/serpapi/NaverTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/NaverTest.java') %>
 see: [https://serpapi.com/naver-search-api](https://serpapi.com/naver-search-api)
 
 ### Search home depot
-<%= snippet('java', 'src/test/java/serpapi/HomeDepotTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/HomeDepotTest.java') %>
 see: [https://serpapi.com/home-depot-search-api](https://serpapi.com/home-depot-search-api)
 
 ### Search apple app store
-<%= snippet('java', 'src/test/java/serpapi/AppleAppStoreTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/AppleAppStoreTest.java') %>
 see: [https://serpapi.com/apple-app-store](https://serpapi.com/apple-app-store)
 
 ### Search duckduckgo
-<%= snippet('java', 'src/test/java/serpapi/DuckduckgoTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/DuckduckgoTest.java') %>
 see: [https://serpapi.com/duckduckgo-search-api](https://serpapi.com/duckduckgo-search-api)
 
 ### Search google
-<%= snippet('java', 'src/test/java/serpapi/GoogleTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/GoogleTest.java') %>
 see: [https://serpapi.com/search-api](https://serpapi.com/search-api)
 
 ### Search google scholar
-<%= snippet('java', 'src/test/java/serpapi/GoogleScholarTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/GoogleScholarTest.java') %>
 see: [https://serpapi.com/google-scholar-api](https://serpapi.com/google-scholar-api)
 
 ### Search google autocomplete
-<%= snippet('java', 'src/test/java/serpapi/GoogleAutocompleteTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/GoogleAutocompleteTest.java') %>
 see: [https://serpapi.com/google-autocomplete-api](https://serpapi.com/google-autocomplete-api)
 
 ### Search google product
-<%= snippet('java', 'src/test/java/serpapi/GoogleProductTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/GoogleProductTest.java') %>
 see: [https://serpapi.com/google-product-api](https://serpapi.com/google-product-api)
 
 ### Search google reverse image
-<%= snippet('java', 'src/test/java/serpapi/GoogleReverseImageTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/GoogleReverseImageTest.java') %>
 see: [https://serpapi.com/google-reverse-image](https://serpapi.com/google-reverse-image)
 
 ### Search google events
-<%= snippet('java', 'src/test/java/serpapi/GoogleEventsTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/GoogleEventsTest.java') %>
 see: [https://serpapi.com/google-events-api](https://serpapi.com/google-events-api)
 
-### Search google local services
-<%= snippet('java', 'src/test/java/serpapi/GoogleLocalServicesTest.java') %>
-see: [https://serpapi.com/google-local-services-api](https://serpapi.com/google-local-services-api)
-
 ### Search google maps
-<%= snippet('java', 'src/test/java/serpapi/GoogleMapsTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/GoogleMapsTest.java') %>
 see: [https://serpapi.com/google-maps-api](https://serpapi.com/google-maps-api)
 
 ### Search google jobs
-<%= snippet('java', 'src/test/java/serpapi/GoogleJobsTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/GoogleJobsTest.java') %>
 see: [https://serpapi.com/google-jobs-api](https://serpapi.com/google-jobs-api)
 
 ### Search google play
-<%= snippet('java', 'src/test/java/serpapi/GooglePlayTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/GooglePlayTest.java') %>
 see: [https://serpapi.com/google-play-api](https://serpapi.com/google-play-api)
 
 ### Search google images
-<%= snippet('java', 'src/test/java/serpapi/GoogleImagesTest.java') %>
+<%= snippet('java', 'src/test/java/serpapi/example/GoogleImagesTest.java') %>
 see: [https://serpapi.com/images-results](https://serpapi.com/images-results)
 
 
