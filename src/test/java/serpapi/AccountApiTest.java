@@ -12,12 +12,15 @@ import java.util.Map;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+/***
+ * Test SerpApi.account() method.
+ */
 public class AccountApiTest {
 
   @Test
   public void account() throws Exception {
     if (System.getenv("SERPAPI_KEY") == null) {
-     return;
+     fail("SERPAPI_KEY is not set");
     }
 
     Map<String, String> parameter = new HashMap<String, String>();

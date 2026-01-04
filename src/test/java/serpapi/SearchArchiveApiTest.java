@@ -10,16 +10,16 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 /**
- * Test main class
+ * Test SerpApi.searchArchive() method.
  */
 public class SearchArchiveApiTest {
-
 
   @Test
   public void searchArchive() throws SerpApiException, InterruptedException {
     // skip test if no api_key provided
-    if(System.getenv("SERPAPI_KEY") == null)
-      return;
+    if(System.getenv("SERPAPI_KEY") == null) {
+      fail("SERPAPI_KEY is not set");
+    }
 
     Map<String, String> parameter = new HashMap<>();
     parameter.put("api_key", System.getenv("SERPAPI_KEY"));

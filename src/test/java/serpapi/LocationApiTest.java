@@ -13,12 +13,16 @@ import java.util.HashMap;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Test SerpApi.location() method.
+ */
 public class LocationApiTest {
 
   @Test
   public void location() throws Exception {
-    if(System.getenv("SERPAPI_KEY") == null)
-      return;
+    if(System.getenv("SERPAPI_KEY") == null) {
+      fail("SERPAPI_KEY is not set");
+    }
 
     SerpApi serpapi = new SerpApi();
 
