@@ -9,12 +9,12 @@ plugins {
 
 // Package default
 archivesBaseName = 'serpapi'
-version = '1.0.0'
+version = '1.1.0'
 group = 'com.github.serpapi'
 
 // java version 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 21
+targetCompatibility = 21
 
 // Load repositories
 repositories {
@@ -65,6 +65,6 @@ publishing {
 }
 
 wrapper {
-    gradleVersion = "7.3.3"
+    gradleVersion = "8.5"
     distributionType = Wrapper.DistributionType.ALL
 }

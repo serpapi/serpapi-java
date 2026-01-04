@@ -1,9 +1,9 @@
 .PHONY: build
 
-ifndef API_KEY
-$(error "API_KEY must be defined")
+ifndef SERPAPI_KEY
+$(error "SERPAPI_KEY must be defined")
 else
-$(info "found API_KEY variable")
+$(info "found SERPAPI_KEY variable")
 endif
 
 all: init clean build run

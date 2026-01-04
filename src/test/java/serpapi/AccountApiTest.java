@@ -16,12 +16,12 @@ public class AccountApiTest {
 
   @Test
   public void account() throws Exception {
-    if (System.getenv("API_KEY") == null) {
+    if (System.getenv("SERPAPI_KEY") == null) {
      return;
     }
 
     Map<String, String> parameter = new HashMap<String, String>();
-    parameter.put("api_key", System.getenv("API_KEY"));
+    parameter.put("api_key", System.getenv("SERPAPI_KEY"));
     SerpApi client = new SerpApi(parameter);
     JsonObject info = client.account();
     System.out.println(info.toString());

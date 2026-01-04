@@ -11,7 +11,7 @@ import java.util.HashMap;
 /**
  * SerpApi wraps HTTP interaction with the service serpapi.com
  */
-public class SerpApi extends Exception {
+public class SerpApi {
 
  /** 
   * client parameters

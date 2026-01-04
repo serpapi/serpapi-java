@@ -123,7 +123,7 @@ it prints the first 3 location matching Austin (Texas, Texas, Rochester)
 Let's run a search to get a search_id.
 ```java
 Map<String, String> auth = new HashMap<>();
-auth.put("api_key", System.getenv("API_KEY"));
+auth.put("api_key", System.getenv("SERPAPI_KEY"));
 SerpApi serpapi = new SerpApi(auth);
 
 Map<String, String> parameter = new HashMap<>();

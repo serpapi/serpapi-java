@@ -12,25 +12,25 @@ import static org.junit.Assert.*;
 /**
  * Test main class
  */
-public class NaverTest {
+public class HomeDepotTest {
 
   @Test
   public void search() throws SerpApiException {
     // skip test if no api_key provided
-    if(System.getenv("API_KEY") == null)
+    if(System.getenv("SERPAPI_KEY") == null)
       return;
 
     // setup serpapi client
     Map<String, String> auth = new HashMap<>();
-    auth.put("api_key", System.getenv("API_KEY"));
+    auth.put("api_key", System.getenv("SERPAPI_KEY"));
     SerpApi client = new SerpApi(auth);
 
     // run search
     Map<String, String> parameter = new HashMap<>();
-    parameter.put("engine", "naver");
-    parameter.put("query", "coffee");
+    parameter.put("engine", "home_depot");
+    parameter.put("q", "table");
     JsonObject results = client.search(parameter);
-    assertTrue(results.getAsJsonArray("ads_results").size() > 5);
+    assertTrue(results.getAsJsonArray("products").size() > 5);
   }
 
 }

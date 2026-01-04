@@ -12,25 +12,26 @@ import static org.junit.Assert.*;
 /**
  * Test main class
  */
-public class AppleAppStoreTest {
+public class GooglePlayTest {
 
   @Test
   public void search() throws SerpApiException {
     // skip test if no api_key provided
-    if(System.getenv("API_KEY") == null)
+    if(System.getenv("SERPAPI_KEY") == null)
       return;
 
     // setup serpapi client
     Map<String, String> auth = new HashMap<>();
-    auth.put("api_key", System.getenv("API_KEY"));
+    auth.put("api_key", System.getenv("SERPAPI_KEY"));
     SerpApi client = new SerpApi(auth);
 
     // run search
     Map<String, String> parameter = new HashMap<>();
-    parameter.put("engine", "apple_app_store");
-    parameter.put("term", "coffee");
+    parameter.put("engine", "google_play");
+    parameter.put("q", "kite");
+    parameter.put("store", "apps");
     JsonObject results = client.search(parameter);
-    assertTrue(results.getAsJsonArray("organic_results").size() > 5);
+    assertTrue(results.getAsJsonArray("organic_results").size() > 1);
   }
 
 }

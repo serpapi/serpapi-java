@@ -17,13 +17,13 @@ public class LocationApiTest {
 
   @Test
   public void location() throws Exception {
-    if(System.getenv("API_KEY") == null)
+    if(System.getenv("SERPAPI_KEY") == null)
       return;
 
     SerpApi serpapi = new SerpApi();
 
     Map<String, String> parameter = new HashMap<String, String>();
-    parameter.put("q", "Austin");
+    parameter.put("q", "Austin, TX");
     parameter.put("limit", "3");
     JsonArray location = serpapi.location(parameter);
     assertEquals("Austin, TX", location.get(0).getAsJsonObject().get("name").getAsString());
