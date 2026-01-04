@@ -20,10 +20,12 @@ coverage:
 	./gradlew test jacocoTestReport
 	@echo "Coverage report: build/reports/jacoco/test/html/index.html"
 
+# Build the project
 build: clean
 	./gradlew build publishToMavenLocal -x test
 	@echo "see build/lib"
 
+# Build the demo project
 oobt: build
 	$(MAKE) -C demo all
 
@@ -31,8 +33,9 @@ oobt: build
 readme:
 	erb -T '-' README.md.erb > README.md
 
+# Build the javadoc
 doc:
-	gradle javadoc --info --warning-mode all
+	./gradlew javadoc --info --warning-mode all
 
 # Create a release using GitHub
 release: doc build
