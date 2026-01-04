@@ -9,7 +9,7 @@ endif
 all: init clean build run
 
 init:
-	gradle wrapper
+	../gradlew wrapper
 	chmod +x ./gradlew
 
 clean:
@@ -26,4 +26,4 @@ build: clean
 	@./gradlew build
 
 run:
-	@./gradlew run --args="$(API_KEY)"
+	@./gradlew run --args="$(SERPAPI_KEY)"

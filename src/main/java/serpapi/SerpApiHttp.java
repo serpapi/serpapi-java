@@ -1,25 +1,23 @@
 package serpapi;
 
-import javax.net.ssl.*;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
 /**
  * HTTPS client for Serp API
  */
 public class SerpApiHttp {
   // http request configuration
-  private int httpConnectionTimeout;
-  private int httpReadTimeout;
+  private int httpConnectionTimeout = 60000;
+  private int httpReadTimeout = 60000;
 
   /**
    * current API version
@@ -41,84 +39,20 @@ public class SerpApiHttp {
    */
   public String path;
 
+  /**
+   * HTTP client
+   */
+  private HttpClient httpClient;
+
   /***
    * Constructor
    * @param path HTTP url path
    */
   public SerpApiHttp(String path) {
     this.path = path;
-  }
-
-  /***
-   * Connect socket connection
-   *
-   * @param path url end point
-   * @param parameter client parameters like: { "q": "coffee", "location": "Austin, TX"}
-   * @return HttpURLConnection connection object
-   * @throws SerpApiException wraps error message
-   */
-  protected HttpURLConnection connect(String path, Map<String, String> parameter) throws SerpApiException {
-    HttpURLConnection con;
-    try {
-      allowHTTPS();
-      String query = ParameterStringBuilder.getParamsString(parameter);
-      URL url = new URL(BACKEND + path + "?" + query);
-      con = (HttpURLConnection) url.openConnection();
-      con.setRequestMethod("GET");
-    } catch (IOException e) {
-      throw new SerpApiException(e);
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-      throw new SerpApiException(e);
-    } catch (KeyManagementException e) {
-      e.printStackTrace();
-      throw new SerpApiException(e);
-    }
-
-    String outputFormat = parameter.get("output");
-    if (outputFormat == null) {
-      throw new SerpApiException("output format must be defined: " + path);
-    } else if (outputFormat.startsWith("json")) {
-      con.setRequestProperty("Content-Type", "application/json");
-    }
-    con.setConnectTimeout(getHttpConnectionTimeout());
-    con.setReadTimeout(getHttpReadTimeout());
-
-    con.setDoOutput(true);
-    return con;
-  }
-
-  // Allow HTTPS support with legacy java version
-  private void allowHTTPS() throws NoSuchAlgorithmException, KeyManagementException {
-    TrustManager[] trustAllCerts;
-    trustAllCerts = new TrustManager[] { new X509TrustManager() {
-      public X509Certificate[] getAcceptedIssuers() {
-        return null;
-      }
-
-      public void checkClientTrusted(X509Certificate[] certs, String authType) {
-      }
-
-      public void checkServerTrusted(X509Certificate[] certs, String authType) {
-      }
-
-    } };
-
-    SSLContext sc = SSLContext.getInstance("SSL");
-    sc.init(null, trustAllCerts, new java.security.SecureRandom());
-    HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-
-    // Create all-trusting host name verifier
-    HostnameVerifier allHostsValid = new HostnameVerifier() {
-      public boolean verify(String hostname, SSLSession session) {
-        return true;
-      }
-    };
-    // Install the all-trusting host verifier
-    HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
-    /*
-     * end of the fix
-     */
+    this.httpClient = HttpClient.newBuilder()
+        .connectTimeout(Duration.ofMillis(httpConnectionTimeout))
+        .build();
   }
 
   /***
@@ -129,47 +63,35 @@ public class SerpApiHttp {
    * @throws SerpApiException wraps error message
    */
   public String get(Map<String, String> parameter) throws SerpApiException {
-    HttpURLConnection con = connect(this.path, parameter);
-
-    // Get HTTP status
-    int statusCode = -1;
-    // Hold response stream
-    InputStream is = null;
-    // Read buffer
-    BufferedReader in = null;
+    String query;
     try {
-      statusCode = con.getResponseCode();
-
-      if (statusCode == 200) {
-        is = con.getInputStream();
-      } else {
-        is = con.getErrorStream();
-      }
-
-      Reader reader = new InputStreamReader(is);
-      in = new BufferedReader(reader);
-    } catch (IOException e) {
+      query = ParameterStringBuilder.getParamsString(parameter);
+    } catch (UnsupportedEncodingException e) {
       throw new SerpApiException(e);
     }
 
-    String inputLine;
-    StringBuffer content = new StringBuffer();
+    URI uri = URI.create(BACKEND + path + "?" + query);
+
+    HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+        .uri(uri)
+        .timeout(Duration.ofMillis(httpReadTimeout))
+        .GET();
+
+    String outputFormat = parameter.get("output");
+    if (outputFormat != null && outputFormat.startsWith("json")) {
+      requestBuilder.header("Content-Type", "application/json");
+    }
+
     try {
-      while ((inputLine = in.readLine()) != null) {
-        content.append(inputLine);
+      HttpResponse<String> response = httpClient.send(requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
+      
+      if (response.statusCode() != 200) {
+        triggerSerpApiException(response.body());
       }
-      in.close();
-    } catch (IOException e) {
+      return response.body();
+    } catch (IOException | InterruptedException e) {
       throw new SerpApiException(e);
     }
-
-    // Disconnect
-    con.disconnect();
-
-    if (statusCode != 200) {
-      triggerSerpApiException(content.toString());
-    }
-    return content.toString();
   }
 
   /**
@@ -183,7 +105,7 @@ public class SerpApiHttp {
       JsonObject element = gson.fromJson(content, JsonObject.class);
       errorMessage = element.get("error").getAsString();
     } catch (Exception e) {
-      throw new AssertionError("invalid response format: " + content);
+      throw new SerpApiException("invalid response format: " + content);
     }
     throw new SerpApiException(errorMessage);
   }
@@ -204,6 +126,10 @@ public class SerpApiHttp {
    */
   public void setHttpConnectionTimeout(int httpConnectionTimeout) {
     this.httpConnectionTimeout = httpConnectionTimeout;
+    // Recreate client with new timeout
+    this.httpClient = HttpClient.newBuilder()
+        .connectTimeout(Duration.ofMillis(httpConnectionTimeout))
+        .build();
   }
 
   /**

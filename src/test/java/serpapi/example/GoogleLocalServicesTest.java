@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 /**
  * Test main class
  */
-public class GoogleReverseImageTest {
+public class GoogleLocalServicesTest {
 
   @Test
   public void search() throws SerpApiException {
@@ -28,8 +28,10 @@ public class GoogleReverseImageTest {
 
     // run search
     Map<String, String> parameter = new HashMap<>();
-    parameter.put("engine", "google_reverse_image");
-    parameter.put("image_url", "https://i.imgur.com/5bGzZi7.jpg");
+    parameter.put("engine", "google_local_services");
+    parameter.put("q", "electrician");
+    parameter.put("location", "Austin, Texas, United States");
+    parameter.put("data_cid", "6745062158417646970");
     JsonObject results = client.search(parameter);
     assertNotNull(results);
   }

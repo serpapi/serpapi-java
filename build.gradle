@@ -5,24 +5,35 @@ plugins {
     id 'jacoco'
 }
 
+jacoco {
+    toolVersion = "0.8.12"
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
 // Package default
-archivesBaseName = 'serpapi'
+base {
+    archivesName = 'serpapi'
+}
 version = '1.1.0'
 group = 'com.github.serpapi'
 
-// java version 
-sourceCompatibility = 21
-targetCompatibility = 21
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+    withJavadocJar()
+}
 
 // Load repositories
 repositories {
     mavenCentral()
 
     maven { url "https://jitpack.io" }
-}
-
-java {
-    withJavadocJar()
 }
 
 dependencies {
@@ -42,6 +53,15 @@ tasks.named('jar') {
     manifest {
         attributes('Implementation-Title': project.name,
                    'Implementation-Version': project.version)
+    }
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "short"
+        showStackTraces true
+        showStandardStreams true
     }
 }
 

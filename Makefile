@@ -8,12 +8,12 @@ clean:
 
 # Initialize gradle wrapper
 init:
-	gradle wrapper
+	./gradlew wrapper
 	chmod +x ./gradlew
 
 # Run gradle test with information
 test:
-	./gradlew test --info
+	./gradlew test
 
 # Run test coverage
 coverage:
@@ -23,7 +23,7 @@ coverage:
 # Build the project
 build: clean
 	./gradlew build publishToMavenLocal -x test
-	@echo "see build/lib"
+	@echo "see build/libs"
 
 # Build the demo project
 oobt: build
@@ -35,7 +35,7 @@ readme:
 
 # Build the javadoc
 doc:
-	./gradlew javadoc --info --warning-mode all
+	./gradlew javadoc --warning-mode all
 
 # Create a release using GitHub
 release: doc build
