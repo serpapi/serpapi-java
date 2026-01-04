@@ -10,6 +10,12 @@ import java.util.Map;
  */
 public class ParameterStringBuilder
  {
+   /**
+    * Default constructor
+    */
+    public ParameterStringBuilder() {
+    }
+
    /***
     * getParamsString 
     * @param params search parameters

@@ -189,6 +189,8 @@ public class SerpApiHttp {
   }
 
   /**
+    * Get the HTTP connection timeout
+    * 
     * @return current HTTP connection timeout
     */
   public int getHttpConnectionTimeout() {
@@ -196,6 +198,8 @@ public class SerpApiHttp {
   }
 
   /**
+   * Set the HTTP connection timeout
+   * 
    * @param httpConnectionTimeout set HTTP connection timeout
    */
   public void setHttpConnectionTimeout(int httpConnectionTimeout) {
@@ -203,6 +207,8 @@ public class SerpApiHttp {
   }
 
   /**
+   * Get the HTTP read timeout
+   * 
    * @return current HTTP read timeout
    */
   public int getHttpReadTimeout() {
@@ -210,6 +216,8 @@ public class SerpApiHttp {
   }
 
   /**
+   * Set the HTTP read timeout
+   * 
    * @param httpReadTimeout set HTTP read timeout
    */
   public void setHttpReadTimeout(int httpReadTimeout) {

@@ -131,6 +131,8 @@ public class SerpApi {
   }
 
   /***
+   * Get the HTTP client used for requests
+   * 
    * @return http client
    */
   public SerpApiHttp getClient() {
