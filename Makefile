@@ -15,6 +15,11 @@ init:
 test:
 	./gradlew test --info
 
+# Run test coverage
+coverage:
+	./gradlew test jacocoTestReport
+	@echo "Coverage report: build/reports/jacoco/test/html/index.html"
+
 build: clean
 	./gradlew build publishToMavenLocal -x test
 	@echo "see build/lib"

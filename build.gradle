@@ -1,10 +1,8 @@
 // Java library
 plugins { 
     id 'java-library'
-}
-
-plugins {
- id 'maven-publish'
+    id 'maven-publish'
+    id 'jacoco'
 }
 
 // Package default
