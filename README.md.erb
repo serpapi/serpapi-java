@@ -1,14 +1,17 @@
 <%-
 def snippet(format, path) 
  lines = File.new(path).readlines
-stop = lines.find_index { |line| line =~ /assertTrue/}
-if stop.nil?
-    raise "No assertTrue found in #{path}"
+stop = lines.find_index do |line|
+  next false if line.lstrip.start_with?('//')
+  line.match?(/\bassert(True|NotNull)\s*\(/)
 end
-slice = File.new(path).readlines[23..stop-1]
+if stop.nil?
+    raise "No assertTrue/assertNotNull found in #{path}"
+end
+slice = lines[23..stop-1]
 slice << "System.out.println(results.toString());"
 buf = slice.map { |l| l.gsub(/(^\s\s\s\s)/, '')}.join
-buf.gsub!("System.getenv(\"API_KEY\")", "\"your_api_key\"")
+buf.gsub!("System.getenv(\"SERPAPI_KEY\")", "\"your_api_key\"")
 
  %Q(```#{format}\n#{buf}\n```\n\n * source code: [#{path}](https://github.com/serpapi/serpapi-#{format}/blob/master/#{path}))
 end
@@ -29,8 +32,8 @@ SerpApi supports Google, Google Maps, Google Shopping, Baidu, Yandex, Yahoo, eBa
 
 Using Maven / Gradle.
 
-Edit your build.gradle file
-```java
+Edit your `build.gradle` file:
+```gradle
 repositories {
     maven { url "https://jitpack.io" }
 }
@@ -40,25 +43,24 @@ dependencies {
 }
 ```
 
-To list all the version available.
+To list all available versions:
 https://jitpack.io/api/builds/com.github.serpapi/serpapi-java
 
 or you can download the jar file from https://github.com/serpapi/serpapi-java/releases
 
-Note: jitpack.io enables to download maven package directly from github release.
+Note: JitPack builds Maven artifacts from GitHub releases and tags.
 
 ## Usage
 
-To get started with this project in Java. 
-We provided a fully working example.
+To try the library quickly, use the demo project:
 ```bash
 git clone https://github.com/serpapi/serpapi-java.git
 cd serpapi-java/demo
-make run api_key=<your private key>
+make all SERPAPI_KEY='<your private key>'
 ```
-Note: You need an account with SerpApi to obtain this key from: https://serpapi.com/dashboard
+Use quotes if your key contains shell-special characters. You need a SerpApi account to obtain a key: https://serpapi.com/dashboard
 
-file: demo/src/main/java/demo/App.java
+`demo/src/main/java/demo/App.java`:
 ```java
 public class App {
     public static void main(String[] args) throws SerpApiException {
@@ -102,21 +104,16 @@ The [SerpApi.com API Documentation](https://serpapi.com/search-api) contains a l
 
 ## Documentation
 
-Documentation is [available on Read the Docs](https://serpapi-python.readthedocs.io/en/latest/).
+- [SerpApi Search API](https://serpapi.com/search-api) — parameters, engines, and response formats  
+- After cloning, run `./gradlew javadoc` and open `build/docs/javadoc/index.html` for this library’s Javadoc.
 
 ## Requirements
 
-This project is an implementation of SerpApi in Java 7.
-This code depends on GSON for efficient JSON processing.
-The HTTP response are converted to JSON Object.
+This library uses [Gson](https://github.com/google/gson) for JSON and returns responses as Gson `JsonObject` / `JsonArray`.
 
-Runtime:
- - Java / JDK 8+ (https://www.java.com/en/download/)
-   Older version of java do not support HTTPS protocol. 
-   The SSLv3 is buggy which leads to Java raising this exception: javax.net.ssl.SSLHandshakeException
+**This repository** is built and tested with **JDK 21** and the **Gradle wrapper** (`./gradlew`, currently Gradle 8.5). Use the wrapper so you do not need a separate Gradle install.
 
-For development:
- - Gradle 7.7+ (https://gradle.org/install/) 
+**Consumers** of the JitPack artifact should run a JVM whose version is at least the **bytecode level** of the release you depend on (releases from this branch target **Java 21**).
 
 
 ### Location API
@@ -127,18 +124,18 @@ Map<String, String> parameter = new HashMap<String, String>();
 parameter.put("q", "Austin");
 parameter.put("limit", "3");
 JsonArray location = serpapi.location(parameter);
-assertEquals("Austin, TX", location.get(0).getAsJsonObject().get("name").getAsString());
+System.out.println(location.get(0).getAsJsonObject().get("name").getAsString());
+// Prints the first matching name among up to 3 results (see LocationApiTest for a JUnit example).
 ```
-it prints the first 3 location matching Austin (Texas, Texas, Rochester)
 
-[/src/test/java/serpapi/LocationApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/LocationApiTest.java)
+[LocationApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/LocationApiTest.java)
 
 ### Search Archive API
 
-Let's run a search to get a search_id.
+Run a search to obtain a `search_id`.
 ```java
 Map<String, String> auth = new HashMap<>();
-auth.put("api_key", System.getenv("SERPAPI_KEY"));
+auth.put("api_key", "your_api_key");
 SerpApi serpapi = new SerpApi(auth);
 
 Map<String, String> parameter = new HashMap<>();
@@ -153,7 +150,7 @@ parameter.put("device", "desktop");
 JsonObject results = serpapi.search(parameter);
 ```
 
-Now let retrieve the previous search from the archive.
+Retrieve the same search from the archive:
 ```java
 // now search in the archive
 String id = results.getAsJsonObject("search_metadata").getAsJsonPrimitive("id").getAsString();
@@ -162,12 +159,12 @@ String id = results.getAsJsonObject("search_metadata").getAsJsonPrimitive("id").
 JsonObject archive = serpapi.searchArchive(id);
 System.out.println(archive.toString());
 ```
-it prints the search from the archive which matches 1:1 to previous search results.
+The archived JSON matches the original search result. In tests, the key is supplied via `System.getenv("SERPAPI_KEY")`; see `SerpApiTest.java`.
 
-[/src/test/java/serpapi/SerpApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/SerpApiTest.java)
+[SerpApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/SerpApiTest.java)
 
 ### Account API
-Get account API
+
 ```java
 Map<String, String> parameter = new HashMap<>();
 parameter.put("api_key", "your_api_key");
@@ -178,9 +175,9 @@ System.out.println(account.toString());
 ```
 it prints your account information.
 
-[/src/test/java/serpapi/AccountApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/AccountApiTest.java)
+[AccountApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/AccountApiTest.java)
 
-## Examples in java
+## Examples in Java
 
 ### Search bing
 <%= snippet('java', 'src/test/java/serpapi/example/BingTest.java') %>
@@ -235,7 +232,23 @@ see: [https://serpapi.com/google-scholar-api](https://serpapi.com/google-scholar
 see: [https://serpapi.com/google-autocomplete-api](https://serpapi.com/google-autocomplete-api)
 
 ### Search google product
-<%= snippet('java', 'src/test/java/serpapi/example/GoogleProductTest.java') %>
+```java
+// setup serpapi client
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+// run search
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_product");
+parameter.put("q", "coffee");
+parameter.put("product_id", "4887235756540435899");
+JsonObject results = client.search(parameter);
+System.out.println(results.toString());
+```
+
+ * source code: [src/test/java/serpapi/example/GoogleProductTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleProductTest.java)
+
 see: [https://serpapi.com/google-product-api](https://serpapi.com/google-product-api)
 
 ### Search google reverse image
@@ -265,54 +278,65 @@ see: [https://serpapi.com/images-results](https://serpapi.com/images-results)
 
 ### Contributing
 
-We love true open source, continuous integration and Test Drive Development (TDD). 
- We are using JUnit test, Git action, gradle [our infrastructure around the clock](https://travis-ci.org/serpapi/serpapi-java) to achieve the best QoS (Quality Of Service).
- 
-To run the test:
-```gradle test```
+We use JUnit, **GitHub Actions** (see [workflow](https://github.com/serpapi/serpapi-java/blob/master/.github/workflows/gradle.yml)), and Gradle.
 
-#### How to build from the source ?
+Run the full test suite locally (integration tests call the live API when a key is present):
 
-You must clone this repository.
+```bash
+export SERPAPI_KEY='your_key'   # optional: without it, many tests skip; some tests require the key and will fail if unset
+./gradlew test
+```
+
+Regenerate `README.md` from the template after editing examples:
+
+```bash
+make readme   # requires Ruby `erb`
+```
+
+#### How to build from source
+
+Clone the repository:
 ```bash
 git clone https://github.com/serpapi/serpapi-java.git
+cd serpapi-java
 ```
-Build the jar file.
+
+Build (use the wrapper):
 ```bash
-gradle build
-```
-Copy the jar to your project lib/ directory.
-```bash
-cp build/libs/serpapi-java.jar path/to/yourproject/lib
+./gradlew build
 ```
 
-## Java limitation
-### SSL handshake error.
-#### symptom
+The main library JAR is under `build/libs/` (for example `serpapi-1.1.0.jar`, name follows `version` in `build.gradle`). Copy it into your project’s `lib/` directory if you are not using Maven/Gradle dependency resolution.
 
-javax.net.ssl.SSLHandshakeException
+## TLS / HTTPS and older JVMs
+### Symptom
 
-#### cause
-SerpApi is using HTTPS / SSLv3. Older JVM version do not support this protocol because it's more recent. 
+`javax.net.ssl.SSLHandshakeException`
 
-#### solution
-Upgrade java to 1.8_201+ (which is recommended by Oracle).
+### Cause
 
- * On OSX you can switch versino of Java.
+SerpApi is served over **HTTPS (TLS)**. Very old JRE/JDK builds may lack the TLS versions or cipher suites required to connect.
+
+### Solution
+
+Use a **current JDK** (this project is tested on **JDK 21**). On macOS you can select an installed JDK, for example:
+
 ```sh
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8.0_201`
+/usr/libexec/java_home -V
+export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 java -version
 ```
 
- * On Windows manually upgrade your JDK / JVM to the latest.
+On Windows, install a current JDK from your vendor and point `JAVA_HOME` at it.
 
 ### Inspiration
- * http://www.baeldung.com/java-http-request
+ * https://www.baeldung.com/java-http-request
  * https://github.com/google/gson
  
 ## License
 MIT license
 
 ## Changelog
-- 1.0.0 - Fully revisit API naming convention, and generalize client usage to match serpapi.com latest development
+- 1.1.0 — Java 21, Gradle 8.x; ongoing API and example updates
+- 1.0.0 — Revisit API naming and align the client with serpapi.com
 

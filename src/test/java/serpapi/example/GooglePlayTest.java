@@ -1,8 +1,9 @@
 package serpapi.example;
 import serpapi.*;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -32,7 +33,15 @@ public class GooglePlayTest {
     parameter.put("q", "kite");
     parameter.put("store", "apps");
     JsonObject results = client.search(parameter);
-    assertTrue(results.getAsJsonArray("organic_results").size() > 1);
+    JsonArray sections = results.getAsJsonArray("organic_results");
+    int appCount = 0;
+    for (JsonElement section : sections) {
+      JsonObject sectionObj = section.getAsJsonObject();
+      if (sectionObj.has("items") && sectionObj.get("items").isJsonArray()) {
+        appCount += sectionObj.getAsJsonArray("items").size();
+      }
+    }
+    assertTrue(appCount > 1);
   }
 
 }
