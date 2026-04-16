@@ -46,7 +46,7 @@ public class SerpApi {
    * Constructor without arguments
    */
   public SerpApi() {
-    this.parameter = new HashMap();
+    this.parameter = new HashMap<>();
     this.client = new SerpApiHttp("/search");
     this.client.setHttpConnectionTimeout(this.timeout);
   }
@@ -153,7 +153,7 @@ public class SerpApi {
     this.client.path = path;
 
     // create HTTP query
-    Map<String, String> query = new HashMap();
+    Map<String, String> query = new HashMap<>();
 
     if (path.startsWith("/searches")) {
       // Only preserve API_KEY

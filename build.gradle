@@ -6,7 +6,7 @@ plugins {
 }
 
 jacoco {
-    toolVersion = "0.8.12"
+    toolVersion = "0.8.13"
 }
 
 jacocoTestReport {
@@ -33,7 +33,7 @@ java {
 repositories {
     mavenCentral()
 
-    maven { url "https://jitpack.io" }
+    maven { url = "https://jitpack.io" }
 }
 
 dependencies {
@@ -57,11 +57,16 @@ tasks.named('jar') {
 }
 
 test {
+    jacoco {
+        // Avoid trying to instrument JDK internals on newest runtimes.
+        excludes = ['java.*', 'jdk.*', 'sun.*']
+    }
+
     testLogging {
         events "passed", "skipped", "failed"
-        exceptionFormat "short"
-        showStackTraces true
-        showStandardStreams true
+        exceptionFormat = "short"
+        showStackTraces = true
+        showStandardStreams = true
     }
 }
 
