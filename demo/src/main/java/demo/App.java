@@ -3,9 +3,7 @@
  */
 package demo;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.Map;
@@ -15,37 +13,41 @@ import serpapi.SerpApi;
 import serpapi.SerpApiException;
 
 public class App {
-    public static void main(String[] args) throws SerpApiException {
-        if(args.length != 1) {
-            System.out.println("Usage: app <secret api key>");
+    public static void main(String[] args) {
+        String apiKey = System.getenv("SERPAPI_KEY");
+        if (apiKey == null || apiKey.isEmpty()) {
+            System.out.println("Set environment variable SERPAPI_KEY or pass your key as the only argument.");
             System.exit(1);
-        }
+        } 
 
+        // set search location
         String location = "Austin,Texas";
-        System.out.println("find the first Coffee in " + location);
+        String engine = "google";
+        System.out.println("find the first coffee shop in " + location + " using " + engine);
 
-        // set api_key provided by the command line
         Map<String, String> auth = new HashMap<>();
-        auth.put("api_key", args[0]);
+        auth.put("engine", engine);
+        auth.put("api_key", apiKey);
 
-        // Create search
+        // create client
         SerpApi serpapi= new SerpApi(auth);
 
+        // create search parameters
         Map<String, String> parameter = new HashMap<>();
         parameter.put("q", "Coffee");
         parameter.put("location", location);
 
+        // perform search
         try {
-           // Perform search
-           JsonObject data = serpapi.search(parameter);
-           
-           // Decode response
-           JsonArray results = data.get("local_results").getAsJsonObject().get("places").getAsJsonArray();
-           JsonObject first_result = results.get(0).getAsJsonObject();
-           System.out.println("first coffee shop: " + first_result.get("title").getAsString() + " found on Google in " + location);
+            // get search results
+            JsonObject data = serpapi.search(parameter);
+            JsonArray organic = data.getAsJsonArray("organic_results");
+            JsonObject first = organic.get(0).getAsJsonObject();
+            System.out.println("First result: " + first.get("title").getAsString() + " (search near " + location + ")");
         } catch (SerpApiException e) {
-            System.out.println("oops exception detected!");
+            System.out.println("SerpApi request failed.");
             e.printStackTrace();
+            System.exit(1);
         }
     }
 }

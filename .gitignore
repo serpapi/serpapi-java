@@ -6,7 +6,6 @@ build/
 .project
 bin/
 data.json
-demo/gradle/
 demo/libs/*.jar
 derive.rb
 gradlew.bat

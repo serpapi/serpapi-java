@@ -6,10 +6,14 @@ else
 $(info "found SERPAPI_KEY variable")
 endif
 
+ifeq ($(strip $(SERPAPI_KEY)),)
+$(error "SERPAPI_KEY must be non-empty")
+endif
+
 all: init clean build run
 
+# Ensure wrapper script is executable (wrapper files should be committed under demo/)
 init:
-	../gradlew wrapper
 	chmod +x ./gradlew
 
 clean:
@@ -26,4 +30,4 @@ build: clean
 	@./gradlew build
 
 run:
-	@./gradlew run --args="$(SERPAPI_KEY)"
+	@env SERPAPI_KEY="$(SERPAPI_KEY)" ./gradlew run
