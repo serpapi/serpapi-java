@@ -4,7 +4,7 @@
 [![serpapi-java](https://github.com/serpapi/serpapi-java/actions/workflows/gradle.yml/badge.svg)](https://github.com/serpapi/serpapi-java/actions/workflows/gradle.yml)
 [![](https://jitpack.io/v/serpapi/serpapi-java.svg)](https://jitpack.io/#serpapi/serpapi-java)
 
-Integrate search data into your Java application. This library is the official wrapper for SerpApi (https://serpapi.com).
+Integrate search data into your Java application. This library is the official wrapper for [SerpApi](https://serpapi.com).
 
 SerpApi supports Google, Google Maps, Google Shopping, Baidu, Yandex, Yahoo, eBay, App Stores, and more.
 
@@ -538,6 +538,54 @@ System.out.println(results.toString());
  * source code: [src/test/java/serpapi/example/GoogleImagesTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleImagesTest.java)
 see: [https://serpapi.com/images-results](https://serpapi.com/images-results)
 
+
+## Migration from google-search-results-java
+
+If you are upgrading from the legacy [`google-search-results-java`](https://github.com/serpapi/google-search-results-java) library, here is a summary of what changed.
+
+### Dependency
+
+```gradle
+// before
+implementation 'com.github.serpapi:google-search-results-java:2.0.0'
+
+// after
+implementation 'com.github.serpapi:serpapi-java:1.1.0'
+```
+
+### Class and method renames
+
+| Old (`google-search-results-java`) | New (`serpapi-java`) |
+|------------------------------------|----------------------|
+| `GoogleSearch` | `SerpApi` |
+| `SerpApiSearch` | `SerpApi` |
+| `client.getJson()` | `client.search(parameter)` |
+| `client.getHtml()` | `client.html(parameter)` |
+| `client.getSearchArchive(id)` | `client.searchArchive(id)` |
+| `client.getAccount()` | `client.account()` |
+| `client.getLocation(parameter)` | `client.location(parameter)` |
+| `SerpApiSearchException` | `SerpApiException` |
+
+### Example
+
+```java
+// before
+Map<String, String> parameter = new HashMap<>();
+parameter.put("q", "coffee");
+parameter.put("api_key", "your_api_key");
+GoogleSearch search = new GoogleSearch(parameter);
+JsonObject results = search.getJson();
+
+// after
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+Map<String, String> parameter = new HashMap<>();
+parameter.put("q", "coffee");
+parameter.put("engine", "google");
+JsonObject results = client.search(parameter);
+```
 
 ### Contributing
 
