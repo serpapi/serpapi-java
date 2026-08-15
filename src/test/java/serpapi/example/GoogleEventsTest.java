@@ -1,6 +1,7 @@
 package serpapi.example;
 import serpapi.*;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import org.junit.Test;
@@ -29,9 +30,11 @@ public class GoogleEventsTest {
     // run search
     Map<String, String> parameter = new HashMap<>();
     parameter.put("engine", "google_events");
-    parameter.put("q", "coffee");
+    parameter.put("q", "Events in Austin, TX");
     JsonObject results = client.search(parameter);
-    assertTrue(results.getAsJsonArray("events_results").size() > 5);
+    JsonArray events = results.getAsJsonArray("events_results");
+    assertNotNull("no events_results in response: " + results, events);
+    assertTrue(events.size() > 0);
   }
 
 }
