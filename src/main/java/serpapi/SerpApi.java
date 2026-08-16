@@ -81,8 +81,12 @@ public class SerpApi {
    * @throws SerpApiException wraps backend error message
    */
   public JsonArray location(Map<String, String> parameter) throws SerpApiException {
-    String content = get("/locations.json", "json", parameter);    
+    String content = get("/locations.json", "json", parameter);
     JsonElement element = gson.fromJson(content, JsonElement.class);
+    // An error is reported as an object, where a successful call returns an array.
+    if (element.isJsonObject() && element.getAsJsonObject().has("error")) {
+      this.client.triggerSerpApiException(content);
+    }
     return element.getAsJsonArray();
   }
 
@@ -125,9 +129,15 @@ public class SerpApi {
    * @return JsonObject created by gson parser
    */
   private JsonObject json(String endpoint, Map<String, String> parameter) throws SerpApiException {
-    String content = get(endpoint, "json", parameter);    
+    String content = get(endpoint, "json", parameter);
     JsonElement element = gson.fromJson(content, JsonElement.class);
-    return element.getAsJsonObject();
+    JsonObject result = element.getAsJsonObject();
+    // SerpApi reports some failures in the body of an HTTP 200 response, so the
+    // status code alone is not enough to tell success from failure.
+    if (result.has("error")) {
+      this.client.triggerSerpApiException(content);
+    }
+    return result;
   }
 
   /***
