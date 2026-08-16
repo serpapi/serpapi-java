@@ -43,7 +43,7 @@ make all SERPAPI_KEY='<your private key>'
 Use quotes if your key contains shell-special characters. You need a SerpApi account to obtain a key: https://serpapi.com/dashboard
 
 `demo/src/main/java/demo/App.java`:
-```javapublic 
+```java
 class App {
     public static void main(String[] args) {
         String apiKey = System.getenv("SERPAPI_KEY");
@@ -577,6 +577,7 @@ implementation 'com.github.serpapi:serpapi-java:1.2.0'
 | `SerpApiSearch` | `SerpApi` |
 | `client.getJson()` | `client.search(parameter)` |
 | `client.getHtml()` | `client.html(parameter)` |
+| — | `client.markdown(parameter)` — new in 1.2.0, see [Markdown output](#markdown-output) |
 | `client.getSearchArchive(id)` | `client.searchArchive(id)` |
 | `client.getAccount()` | `client.account()` |
 | `client.getLocation(parameter)` | `client.location(parameter)` |
