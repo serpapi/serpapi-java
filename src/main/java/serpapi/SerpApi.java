@@ -63,6 +63,20 @@ public class SerpApi {
   }
 
   /***
+   * Returns search results as a raw markdown String
+   *
+   * The markdown format is produced by the backend and intended for LLM and
+   * agent consumption. It is returned unparsed, like html().
+   *
+   * @param parameter markdown search parameter
+   * @return raw markdown response from the client engine
+   * @throws SerpApiException wraps backend error message
+   */
+  public String markdown(Map<String, String> parameter) throws SerpApiException {
+    return get("/search", "md", parameter);
+  }
+
+  /***
    * Returns search results as JSON object
    * 
    * @param parameter custom search parameter which override the default parameter provided in the constructor
@@ -153,7 +167,7 @@ public class SerpApi {
    * Build a serp API query by expanding existing parameters
    *
    * @param path backend HTTP path
-   * @param output type of output format (json, html, json_with_images)
+   * @param output type of output format (json, html, md)
    * @param parameter custom search parameter which override the default parameter provided in the constructor
    * @return format parameter hash map
    * @throws SerpApiException wraps backend error message
