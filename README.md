@@ -460,8 +460,9 @@ SerpApi client = new SerpApi(auth);
 // run search
 Map<String, String> parameter = new HashMap<>();
 parameter.put("engine", "google_events");
-parameter.put("q", "coffee");
+parameter.put("q", "Events in Austin, TX");
 JsonObject results = client.search(parameter);
+JsonArray events = results.getAsJsonArray("events_results");
 System.out.println(results.toString());
 ```
 
@@ -508,7 +509,6 @@ see: [https://serpapi.com/google-jobs-api](https://serpapi.com/google-jobs-api)
 
 ### Search google play
 ```java
-
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
 auth.put("api_key", "your_api_key");

@@ -26,10 +26,13 @@ public class SerpApi {
   */
   public SerpApiHttp client;
 
-  /** 
-   * default HTTP client timeout 
+  /**
+   * default HTTP client timeout
+   *
+   * Applied to both connecting and reading. Some engines, home_depot in
+   * particular, regularly take longer than a minute to respond.
    */
-  public Integer timeout = 60000;
+  public Integer timeout = 120000;
 
   /***
    * Constructor
@@ -40,6 +43,7 @@ public class SerpApi {
     this.parameter = parameter;
     this.client = new SerpApiHttp("/search");
     this.client.setHttpConnectionTimeout(this.timeout);
+    this.client.setHttpReadTimeout(this.timeout);
   }
 
   /***
@@ -49,6 +53,7 @@ public class SerpApi {
     this.parameter = new HashMap<>();
     this.client = new SerpApiHttp("/search");
     this.client.setHttpConnectionTimeout(this.timeout);
+    this.client.setHttpReadTimeout(this.timeout);
   }
 
   /***
