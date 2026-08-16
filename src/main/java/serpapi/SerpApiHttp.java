@@ -22,7 +22,7 @@ public class SerpApiHttp {
   /**
    * current API version
    */
-  public static String VERSION = "1.0.0";
+  public static String VERSION = "1.2.0";
 
   /**
    * backend service
