@@ -161,22 +161,17 @@ it prints your account information.
 
 ### Markdown output
 
-Search results are also available as markdown, intended for LLM and agent consumption.
-
 ```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+auth.put("engine", "google");
+SerpApi serpapi = new SerpApi(auth);
+
 Map<String, String> parameter = new HashMap<>();
-parameter.put("api_key", "your_api_key");
-parameter.put("engine", "google");
-
-SerpApi serpapi = new SerpApi(parameter);
-
-Map<String, String> search = new HashMap<>();
-search.put("q", "coffee");
-String content = serpapi.markdown(search);
-System.out.println(content);
+parameter.put("q", "coffee");
+System.out.println(serpapi.markdown(parameter));
 ```
-
-`markdown()` returns the raw markdown String unparsed, like `html()`.
+it prints the results as raw markdown, intended for LLM and agent consumption.
 
 [MarkdownApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/MarkdownApiTest.java)
 
