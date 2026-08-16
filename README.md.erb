@@ -1,6 +1,10 @@
 <%-
 def snippet(format, path) 
  lines = File.new(path).readlines
+start = lines.find_index { |line| line.include?('// setup serpapi client') }
+if start.nil?
+    raise "No '// setup serpapi client' marker found in #{path}"
+end
 stop = lines.find_index do |line|
   next false if line.lstrip.start_with?('//')
   line.match?(/\bassert(True|NotNull)\s*\(/)
@@ -8,7 +12,7 @@ end
 if stop.nil?
     raise "No assertTrue/assertNotNull found in #{path}"
 end
-slice = lines[23..stop-1]
+slice = lines[start..stop-1]
 slice << "System.out.println(results.toString());"
 buf = slice.map { |l| l.gsub(/(^\s\s\s\s)/, '')}.join
 buf.gsub!("System.getenv(\"SERPAPI_KEY\")", "\"your_api_key\"")
