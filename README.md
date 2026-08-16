@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.serpapi:serpapi-java:1.1.0'
+    implementation 'com.github.serpapi:serpapi-java:1.2.0'
 }
 ```
 
@@ -566,7 +566,7 @@ If you are upgrading from the legacy [`google-search-results-java`](https://gith
 implementation 'com.github.serpapi:google-search-results-java:2.0.0'
 
 // after
-implementation 'com.github.serpapi:serpapi-java:1.1.0'
+implementation 'com.github.serpapi:serpapi-java:1.2.0'
 ```
 
 ### Class and method renames
@@ -664,6 +664,7 @@ On Windows, install a current JDK from your vendor and point `JAVA_HOME` at it.
 MIT license
 
 ## Changelog
+- 1.2.0 — Version bump
 - 1.1.0 — Java 21, Gradle 8.x; ongoing API and example updates
 - 1.0.0 — Revisit API naming and align the client with serpapi.com
 
