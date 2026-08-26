@@ -28,7 +28,7 @@ dependencies {
 To list all available versions:
 https://jitpack.io/api/builds/com.github.serpapi/serpapi-java
 
-or you can download the jar file from https://github.com/serpapi/serpapi-java/releases
+Or you can download the JAR file from https://github.com/serpapi/serpapi-java/releases
 
 Note: JitPack builds Maven artifacts from GitHub releases and tags.
 
@@ -155,7 +155,7 @@ SerpApi serpapi = new SerpApi(parameter);
 JsonObject account = serpapi.account();
 System.out.println(account.toString());
 ```
-it prints your account information.
+It prints your account information.
 
 [AccountApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/AccountApiTest.java)
 
@@ -171,15 +171,15 @@ Map<String, String> parameter = new HashMap<>();
 parameter.put("q", "coffee");
 System.out.println(serpapi.markdown(parameter));
 ```
-it prints the results as raw markdown, intended for LLM and agent consumption.
+It prints the results as raw Markdown, intended for LLM and agent consumption.
 
 [MarkdownApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/MarkdownApiTest.java)
 
 ## Examples in Java
 
-### Search bing
+### Search Bing
 ```java
-// setup serpapi client
+//Set up SerpApi client
 Map<String, String> auth = new HashMap<>();
 auth.put("api_key", "your_api_key");
 SerpApi client = new SerpApi(auth);
@@ -192,10 +192,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/BingTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/BingTest.java)
+ * Source code: [src/test/java/serpapi/example/BingTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/BingTest.java)
 see: [https://serpapi.com/bing-search-api](https://serpapi.com/bing-search-api)
 
-### Search baidu
+### Search Baidu
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -210,10 +210,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/BaiduTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/BaiduTest.java)
+ * Source code: [src/test/java/serpapi/example/BaiduTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/BaiduTest.java)
 see: [https://serpapi.com/baidu-search-api](https://serpapi.com/baidu-search-api)
 
-### Search yahoo
+### Search Yahoo
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -228,10 +228,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/YahooTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/YahooTest.java)
+ * Source code: [src/test/java/serpapi/example/YahooTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/YahooTest.java)
 see: [https://serpapi.com/yahoo-search-api](https://serpapi.com/yahoo-search-api)
 
-### Search youtube
+### Search YouTube
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -246,10 +246,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/YoutubeTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/YoutubeTest.java)
+ * Source code: [src/test/java/serpapi/example/YoutubeTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/YoutubeTest.java)
 see: [https://serpapi.com/youtube-search-api](https://serpapi.com/youtube-search-api)
 
-### Search walmart
+### Search Walmart
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -264,10 +264,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/WalmartTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/WalmartTest.java)
+ * Source code: [src/test/java/serpapi/example/WalmartTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/WalmartTest.java)
 see: [https://serpapi.com/walmart-search-api](https://serpapi.com/walmart-search-api)
 
-### Search ebay
+### Search eBay
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -282,10 +282,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/EbayTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/EbayTest.java)
+ * Source code: [src/test/java/serpapi/example/EbayTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/EbayTest.java)
 see: [https://serpapi.com/ebay-search-api](https://serpapi.com/ebay-search-api)
 
-### Search naver
+### Search Naver
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -300,10 +300,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/NaverTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/NaverTest.java)
+ * Source code: [src/test/java/serpapi/example/NaverTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/NaverTest.java)
 see: [https://serpapi.com/naver-search-api](https://serpapi.com/naver-search-api)
 
-### Search home depot
+### Search Home Depot
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -318,10 +318,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/HomeDepotTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/HomeDepotTest.java)
+ * Source code: [src/test/java/serpapi/example/HomeDepotTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/HomeDepotTest.java)
 see: [https://serpapi.com/home-depot-search-api](https://serpapi.com/home-depot-search-api)
 
-### Search apple app store
+### Search Apple App Store
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -336,10 +336,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/AppleAppStoreTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/AppleAppStoreTest.java)
+ * Source code: [src/test/java/serpapi/example/AppleAppStoreTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/AppleAppStoreTest.java)
 see: [https://serpapi.com/apple-app-store](https://serpapi.com/apple-app-store)
 
-### Search duckduckgo
+### Search DuckDuckGo
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -354,10 +354,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/DuckduckgoTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/DuckduckgoTest.java)
+ * Source code: [src/test/java/serpapi/example/DuckduckgoTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/DuckduckgoTest.java)
 see: [https://serpapi.com/duckduckgo-search-api](https://serpapi.com/duckduckgo-search-api)
 
-### Search google
+### Search Google
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -373,10 +373,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GoogleTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleTest.java)
+ * Source code: [src/test/java/serpapi/example/GoogleTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleTest.java)
 see: [https://serpapi.com/search-api](https://serpapi.com/search-api)
 
-### Search google scholar
+### Search Google Scholar
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -391,10 +391,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GoogleScholarTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleScholarTest.java)
+ * Source code: [src/test/java/serpapi/example/GoogleScholarTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleScholarTest.java)
 see: [https://serpapi.com/google-scholar-api](https://serpapi.com/google-scholar-api)
 
-### Search google autocomplete
+### Search Google autocomplete
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -409,10 +409,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GoogleAutocompleteTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleAutocompleteTest.java)
+ * Source code: [src/test/java/serpapi/example/GoogleAutocompleteTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleAutocompleteTest.java)
 see: [https://serpapi.com/google-autocomplete-api](https://serpapi.com/google-autocomplete-api)
 
-### Search google product
+### Search Google product
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -428,11 +428,11 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GoogleProductTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleProductTest.java)
+ * Source code: [src/test/java/serpapi/example/GoogleProductTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleProductTest.java)
 
 see: [https://serpapi.com/google-product-api](https://serpapi.com/google-product-api)
 
-### Search google reverse image
+### Search Google reverse image
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -447,10 +447,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GoogleReverseImageTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleReverseImageTest.java)
+ * Source code: [src/test/java/serpapi/example/GoogleReverseImageTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleReverseImageTest.java)
 see: [https://serpapi.com/google-reverse-image](https://serpapi.com/google-reverse-image)
 
-### Search google events
+### Search Google events
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -466,10 +466,10 @@ JsonArray events = results.getAsJsonArray("events_results");
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GoogleEventsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleEventsTest.java)
+ * Source code: [src/test/java/serpapi/example/GoogleEventsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleEventsTest.java)
 see: [https://serpapi.com/google-events-api](https://serpapi.com/google-events-api)
 
-### Search google maps
+### Search Google Maps
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -486,10 +486,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GoogleMapsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleMapsTest.java)
+ * Source code: [src/test/java/serpapi/example/GoogleMapsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleMapsTest.java)
 see: [https://serpapi.com/google-maps-api](https://serpapi.com/google-maps-api)
 
-### Search google jobs
+### Search Google jobs
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -504,10 +504,10 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GoogleJobsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleJobsTest.java)
+ * Source code: [src/test/java/serpapi/example/GoogleJobsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleJobsTest.java)
 see: [https://serpapi.com/google-jobs-api](https://serpapi.com/google-jobs-api)
 
-### Search google play
+### Search Google Play
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -531,10 +531,10 @@ for (JsonElement section : sections) {
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GooglePlayTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GooglePlayTest.java)
+ * Source code: [src/test/java/serpapi/example/GooglePlayTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GooglePlayTest.java)
 see: [https://serpapi.com/google-play-api](https://serpapi.com/google-play-api)
 
-### Search google images
+### Search Google Images
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -551,7 +551,7 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GoogleImagesTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleImagesTest.java)
+ * Source code: [src/test/java/serpapi/example/GoogleImagesTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleImagesTest.java)
 see: [https://serpapi.com/images-results](https://serpapi.com/images-results)
 
 
@@ -634,7 +634,7 @@ Build (use the wrapper):
 ./gradlew build
 ```
 
-The main library JAR is under `build/libs/` (for example `serpapi-1.1.0.jar`, name follows `version` in `build.gradle`). Copy it into your project’s `lib/` directory if you are not using Maven/Gradle dependency resolution.
+The main library JAR is under `build/libs/` (for example, `serpapi-1.1.0.jar`; the name follows `version` in `build.gradle`). Copy it into your project’s `lib/` directory if you are not using Maven/Gradle dependency resolution.
 
 ## TLS / HTTPS and older JVMs
 ### Symptom
@@ -647,7 +647,7 @@ SerpApi is served over **HTTPS (TLS)**. Very old JRE/JDK builds may lack the TLS
 
 ### Solution
 
-Use a **current JDK** (this project is tested on **JDK 21**). On macOS you can select an installed JDK, for example:
+Use a **current JDK** (this project is tested on **JDK 21**). On macOS, you can select an installed JDK, for example:
 
 ```sh
 /usr/libexec/java_home -V
@@ -655,7 +655,7 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 java -version
 ```
 
-On Windows, install a current JDK from your vendor and point `JAVA_HOME` at it.
+On Windows, install a current JDK from your vendor and point `JAVA_HOME` to it.
 
 ### Inspiration
  * https://www.baeldung.com/java-http-request
@@ -665,7 +665,7 @@ On Windows, install a current JDK from your vendor and point `JAVA_HOME` at it.
 MIT license
 
 ## Changelog
-- 1.2.0 — Add markdown support, improve error handling if corrupt data received
+- 1.2.0 — Add Markdown support, improve error handling if corrupt data is received
 - 1.1.0 — Java 21, Gradle 8.x; ongoing API and example updates
 - 1.0.0 — Revisit API naming and align the client with serpapi.com
 
