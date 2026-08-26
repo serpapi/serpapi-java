@@ -7,10 +7,10 @@ if start.nil?
 end
 stop = lines.find_index do |line|
   next false if line.lstrip.start_with?('//')
-  line.match?(/\bassert(True|NotNull)\s*\(/)
+  line. match?(/\bassert(True|NotNull)\s*\(/)
 end
 if stop.nil?
-    raise "No assertTrue/assertNotNull found in #{path}"
+    raise "No assertTrue/assertNotNull found in #{path}."
 end
 slice = lines[start..stop-1]
 slice << "System.out.println(results.toString());"
@@ -50,7 +50,7 @@ dependencies {
 To list all available versions:
 https://jitpack.io/api/builds/com.github.serpapi/serpapi-java
 
-or you can download the jar file from https://github.com/serpapi/serpapi-java/releases
+Or you can download the JAR file from https://github.com/serpapi/serpapi-java/releases
 
 Note: JitPack builds Maven artifacts from GitHub releases and tags.
 
@@ -80,7 +80,7 @@ class App {
         auth.put("api_key", apiKey);
 
         // create client
-        SerpApi serpapi= new SerpApi(auth);
+        SerpApi serpapi = new SerpApi(auth);
 
         // create search parameters
         Map<String, String> parameter = new HashMap<>();
@@ -159,7 +159,7 @@ Retrieve the same search from the archive:
 // now search in the archive
 String id = results.getAsJsonObject("search_metadata").getAsJsonPrimitive("id").getAsString();
 
-// retrieve search from the archive with speed for free
+//Retrieve search from the archive quickly and for free
 JsonObject archive = serpapi.searchArchive(id);
 System.out.println(archive.toString());
 ```
@@ -177,7 +177,7 @@ SerpApi serpapi = new SerpApi(parameter);
 JsonObject account = serpapi.account();
 System.out.println(account.toString());
 ```
-it prints your account information.
+It prints your account information.
 
 [AccountApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/AccountApiTest.java)
 
@@ -193,65 +193,65 @@ Map<String, String> parameter = new HashMap<>();
 parameter.put("q", "coffee");
 System.out.println(serpapi.markdown(parameter));
 ```
-it prints the results as raw markdown, intended for LLM and agent consumption.
+It prints the results as raw Markdown, intended for LLM and agent consumption.
 
 [MarkdownApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/MarkdownApiTest.java)
 
 ## Examples in Java
 
-### Search bing
+### Search Bing
 <%= snippet('java', 'src/test/java/serpapi/example/BingTest.java') %>
 see: [https://serpapi.com/bing-search-api](https://serpapi.com/bing-search-api)
 
-### Search baidu
+### Search Baidu
 <%= snippet('java', 'src/test/java/serpapi/example/BaiduTest.java') %>
 see: [https://serpapi.com/baidu-search-api](https://serpapi.com/baidu-search-api)
 
-### Search yahoo
+### Search Yahoo
 <%= snippet('java', 'src/test/java/serpapi/example/YahooTest.java') %>
 see: [https://serpapi.com/yahoo-search-api](https://serpapi.com/yahoo-search-api)
 
-### Search youtube
+### Search YouTube
 <%= snippet('java', 'src/test/java/serpapi/example/YoutubeTest.java') %>
 see: [https://serpapi.com/youtube-search-api](https://serpapi.com/youtube-search-api)
 
-### Search walmart
+### Search Walmart
 <%= snippet('java', 'src/test/java/serpapi/example/WalmartTest.java') %>
 see: [https://serpapi.com/walmart-search-api](https://serpapi.com/walmart-search-api)
 
-### Search ebay
+### Search eBay
 <%= snippet('java', 'src/test/java/serpapi/example/EbayTest.java') %>
 see: [https://serpapi.com/ebay-search-api](https://serpapi.com/ebay-search-api)
 
-### Search naver
+### Search Naver
 <%= snippet('java', 'src/test/java/serpapi/example/NaverTest.java') %>
 see: [https://serpapi.com/naver-search-api](https://serpapi.com/naver-search-api)
 
-### Search home depot
+### Search Home Depot
 <%= snippet('java', 'src/test/java/serpapi/example/HomeDepotTest.java') %>
 see: [https://serpapi.com/home-depot-search-api](https://serpapi.com/home-depot-search-api)
 
-### Search apple app store
+### Search Apple App Store
 <%= snippet('java', 'src/test/java/serpapi/example/AppleAppStoreTest.java') %>
 see: [https://serpapi.com/apple-app-store](https://serpapi.com/apple-app-store)
 
-### Search duckduckgo
+### Search DuckDuckGo
 <%= snippet('java', 'src/test/java/serpapi/example/DuckduckgoTest.java') %>
 see: [https://serpapi.com/duckduckgo-search-api](https://serpapi.com/duckduckgo-search-api)
 
-### Search google
+### Search Google
 <%= snippet('java', 'src/test/java/serpapi/example/GoogleTest.java') %>
 see: [https://serpapi.com/search-api](https://serpapi.com/search-api)
 
-### Search google scholar
+### Search Google Scholar
 <%= snippet('java', 'src/test/java/serpapi/example/GoogleScholarTest.java') %>
 see: [https://serpapi.com/google-scholar-api](https://serpapi.com/google-scholar-api)
 
-### Search google autocomplete
+### Search Google autocomplete
 <%= snippet('java', 'src/test/java/serpapi/example/GoogleAutocompleteTest.java') %>
 see: [https://serpapi.com/google-autocomplete-api](https://serpapi.com/google-autocomplete-api)
 
-### Search google product
+### Search Google product
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -267,31 +267,31 @@ JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GoogleProductTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleProductTest.java)
+ * Source code: [src/test/java/serpapi/example/GoogleProductTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleProductTest.java)
 
 see: [https://serpapi.com/google-product-api](https://serpapi.com/google-product-api)
 
-### Search google reverse image
+### Search Google reverse image
 <%= snippet('java', 'src/test/java/serpapi/example/GoogleReverseImageTest.java') %>
 see: [https://serpapi.com/google-reverse-image](https://serpapi.com/google-reverse-image)
 
-### Search google events
+### Search Google events
 <%= snippet('java', 'src/test/java/serpapi/example/GoogleEventsTest.java') %>
 see: [https://serpapi.com/google-events-api](https://serpapi.com/google-events-api)
 
-### Search google maps
+### Search Google Maps
 <%= snippet('java', 'src/test/java/serpapi/example/GoogleMapsTest.java') %>
 see: [https://serpapi.com/google-maps-api](https://serpapi.com/google-maps-api)
 
-### Search google jobs
+### Search Google jobs
 <%= snippet('java', 'src/test/java/serpapi/example/GoogleJobsTest.java') %>
 see: [https://serpapi.com/google-jobs-api](https://serpapi.com/google-jobs-api)
 
-### Search google play
+### Search Google Play
 <%= snippet('java', 'src/test/java/serpapi/example/GooglePlayTest.java') %>
 see: [https://serpapi.com/google-play-api](https://serpapi.com/google-play-api)
 
-### Search google images
+### Search Google Images
 <%= snippet('java', 'src/test/java/serpapi/example/GoogleImagesTest.java') %>
 see: [https://serpapi.com/images-results](https://serpapi.com/images-results)
 
@@ -375,7 +375,7 @@ Build (use the wrapper):
 ./gradlew build
 ```
 
-The main library JAR is under `build/libs/` (for example `serpapi-1.1.0.jar`, name follows `version` in `build.gradle`). Copy it into your project’s `lib/` directory if you are not using Maven/Gradle dependency resolution.
+The main library JAR is under `build/libs/` (for example, `serpapi-1.1.0.jar`; the name follows `version` in `build.gradle`). Copy it into your project’s `lib/` directory if you are not using Maven/Gradle dependency resolution.
 
 ## TLS / HTTPS and older JVMs
 ### Symptom
@@ -388,7 +388,7 @@ SerpApi is served over **HTTPS (TLS)**. Very old JRE/JDK builds may lack the TLS
 
 ### Solution
 
-Use a **current JDK** (this project is tested on **JDK 21**). On macOS you can select an installed JDK, for example:
+Use a **current JDK** (this project is tested on **JDK 21**). On macOS, you can select an installed JDK, for example:
 
 ```sh
 /usr/libexec/java_home -V
@@ -406,7 +406,7 @@ On Windows, install a current JDK from your vendor and point `JAVA_HOME` at it.
 MIT license
 
 ## Changelog
-- 1.2.0 — Add markdown support, improve error handling if corrupt data received
+- 1.2.0 — Add Markdown support, improve error handling if corrupt data is received
 - 1.1.0 — Java 21, Gradle 8.x; ongoing API and example updates
 - 1.0.0 — Revisit API naming and align the client with serpapi.com
 
