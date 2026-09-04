@@ -4,11 +4,9 @@
 [![serpapi-java](https://github.com/serpapi/serpapi-java/actions/workflows/gradle.yml/badge.svg)](https://github.com/serpapi/serpapi-java/actions/workflows/gradle.yml)
 [![JitPack](https://jitpack.io/v/serpapi/serpapi-java.svg)](https://jitpack.io/#serpapi/serpapi-java)
 
-Integrate search data into your Java application. This library is the official wrapper for [SerpApi](https://serpapi.com).
+Integrate search data into your AI workflow, RAG, fine-tuning, or Java application using this official [SerpApi Java SDK](https://serpapi.com/integrations/java).
 
-SerpApi supports Google, Google Maps, Google Shopping, Baidu, Yandex, Yahoo, eBay, App Stores, and more.
-
-[The full documentation is available here.](https://serpapi.com/search-api)
+[SerpApi](https://serpapi.com/) supports Google, Google Maps, Google Shopping, Baidu, Yandex, Yahoo, eBay, App Stores, and many more.
 
 ## Installation 
 
@@ -32,7 +30,11 @@ or you can download the jar file from https://github.com/serpapi/serpapi-java/re
 
 Note: JitPack builds Maven artifacts from GitHub releases and tags.
 
-## Usage
+## Quickstart
+
+[Create a SerpApi account](https://serpapi.com/dashboard) to get your API key, then store it in an environment variable:
+
+```bash export SERPAPI_KEY="your_api_key"```
 
 To try the library quickly, use the demo project:
 ```bash
@@ -81,15 +83,37 @@ class App {
 }
 ```
 
-The [SerpApi.com API Documentation](https://serpapi.com/search-api) contains a list of all the possible parameters that can be passed to the API.
+## Features
+TODO some links are dead find new equivalents
 
+- [Asynchronous searches]() for submitting non-blocking jobs and retrieving completed results from the Search Archive API.
+- [Persistent connections and connection pooling]() for reusing HTTP connections across searches.
+- Search results as Gson JsonObject / JsonArray  responses with `search`, token-efficient Markdown with `md`, or raw search-engine HTML with `html`.
+- SDK methods for the [Image API](https://serpapi.com/image-api), [Location API](https://serpapi.com/locations-api), [Search Archive API](https://serpapi.com/search-archive-api), and [Account API](https://serpapi.com/account-api).
+- Configurable HTTP timeouts and symbolized or string JSON keys.
 
-## Documentation
+## Response Formats
 
-- [SerpApi Search API](https://serpapi.com/search-api) — parameters, engines, and response formats  
-- After cloning, run `./gradlew javadoc` and open `build/docs/javadoc/index.html` for this library’s Javadoc.
+Use `search` for structured results decoded into a  `Gson JsonObject / JsonArray`:
+
+```java results = todo add ```
+
+Use `md` for a token-efficient Markdown String optimized for LLMs and AI agents:
+
+```java markdown = todo add ```
+
+Use `html` when you need the raw search-engine response:
+
+```java raw_html = todo add```
+
+Archived results are also available as Markdown with `client.search_archive(search_id, :md)`.
+
+Learn more about [SerpApi Markdown output](https://serpapi.com/markdown-output).
+
 
 ## Requirements
+
+TODO check if still applicable 
 
 This library uses [Gson](https://github.com/google/gson) for JSON and returns responses as Gson `JsonObject` / `JsonArray`.
 
@@ -97,87 +121,122 @@ This library uses [Gson](https://github.com/google/gson) for JSON and returns re
 
 **Consumers** of the JitPack artifact should run a JVM whose version is at least the **bytecode level** of the release you depend on (releases from this branch target **Java 21**).
 
+## Configuration
 
-### Location API
-```java
-SerpApi serpapi = new SerpApi();
+Set defaults when creating a client, then override search parameters in individual calls:
+```java 
+client = SerpApi::Client.new(
+  api_key: ENV.fetch("SERPAPI_KEY"),
+  engine: "google",
+  hl: "en",
+  gl: "us",
+  persistent: true,
+  timeout: 120
+)
 
-Map<String, String> parameter = new HashMap<String, String>();
-parameter.put("q", "Austin");
-parameter.put("limit", "3");
-JsonArray location = serpapi.location(parameter);
-System.out.println(location.get(0).getAsJsonObject().get("name").getAsString());
-// Prints the first matching name among up to 3 results (see LocationApiTest for a JUnit example).
+results = client.search(
+  q: "coffee",
+  gl: "gb",
+  async: false,
+  symbolize_names: true
+)
 ```
+TODO find out if this is supposed to be a table?
+Optional Default Description 
+`api_key` None Your SerpApi API key. Use an environment variable rather than committing it to source control. 
 
-[LocationApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/LocationApiTest.java)
+`engine` None The search engine used by default, such as google or google_maps. persistent true Reuses the HTTP connection between requests.
 
-### Search Archive API
 
-Run a search to obtain a `search_id`.
+ Call `client.close` when finished. 
+ `timeout `120 Timeout in seconds for non-persistent HTTP requests. 
+
+
+ `async false` Submits searches without waiting for them to complete. It can be set on the client or per search. 
+
+
+ `symbolize_names` true Returns JSON object keys as symbols. Pass false to a search to receive string keys.
+
+
+Search-engine-specific parameters can also be supplied when creating the client or calling `search`. Parameters passed to search override client defaults.
+
+### Search Asynchronous
+Search API features non-blocking search using the option: `async=true`.
+
+- Non-blocking - async=true - a single parent process can handle unlimited concurrent searches.
+- Blocking - async=false - many processes must be forked and synchronized to handle concurrent searches. This strategy is I/O usage because each client would hold a network connection.
+
+Search API enables `async` search.
+
+- Non-blocking (`async=true`) : the development is more complex, but this allows handling many simultaneous connections.
+- Blocking (`async=false`) : it is easy to write the code but more compute-intensive when the parent process needs to hold many connections.
+Here is an example of asynchronous searches using Java
+ TODO ADD 
+
+source code: todo find in java repo
+
+This code shows a simple solution to batch searches asynchronously into a [queue](https://en.wikipedia.org/wiki/Queue_(abstract_data_type)). Each search may take up to few seconds to complete. By the time the first element pops out of the queue, the search results might already be available in the archive. If not, the `search_archive` method blocks until the search results are available.
+
+## Examples
+
+Here are some examples for some of our most popular APIs. You can find the full list of supported engines and parameters in our [documentation](https://serpapi.com/search-engine-apis).
+
+### Google Shopping
+
+Scrape Google Shopping results with product names, prices, ratings, and merchant information.
+
+TODO add code
+
+[See Documentation]()
+
+#### Google Shopping Light
+
+TODO
+
+[See Documentation]()
+
+### Google Images
+
 ```java
+// setup serpapi client
 Map<String, String> auth = new HashMap<>();
 auth.put("api_key", "your_api_key");
-SerpApi serpapi = new SerpApi(auth);
+SerpApi client = new SerpApi(auth);
 
+// run search
 Map<String, String> parameter = new HashMap<>();
-parameter.put("q", "Coffee");
-parameter.put("location", "Austin, Texas, United States");
-parameter.put("hl", "en");
-parameter.put("gl", "us");
-parameter.put("google_domain", "google.com");
-parameter.put("safe", "active");
-parameter.put("start", "10");
-parameter.put("device", "desktop");
-JsonObject results = serpapi.search(parameter);
-```
-
-Retrieve the same search from the archive:
-```java
-// now search in the archive
-String id = results.getAsJsonObject("search_metadata").getAsJsonPrimitive("id").getAsString();
-
-// retrieve search from the archive with speed for free
-JsonObject archive = serpapi.searchArchive(id);
-System.out.println(archive.toString());
-```
-The archived JSON matches the original search result. In tests, the key is supplied via `System.getenv("SERPAPI_KEY")`; see `SerpApiTest.java`.
-
-[SerpApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/SerpApiTest.java)
-
-### Account API
-
-```java
-Map<String, String> parameter = new HashMap<>();
-parameter.put("api_key", "your_api_key");
-
-SerpApi serpapi = new SerpApi(parameter);
-JsonObject account = serpapi.account();
-System.out.println(account.toString());
-```
-it prints your account information.
-
-[AccountApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/AccountApiTest.java)
-
-### Markdown output
-
-```java
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-auth.put("engine", "google");
-SerpApi serpapi = new SerpApi(auth);
-
-Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_images");
+parameter.put("engine", "google_images");
+parameter.put("tbm", "isch");
 parameter.put("q", "coffee");
-System.out.println(serpapi.markdown(parameter));
+JsonObject results = client.search(parameter);
+System.out.println(results.toString());
 ```
-it prints the results as raw markdown, intended for LLM and agent consumption.
 
-[MarkdownApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/MarkdownApiTest.java)
+[See Documentation](https://serpapi.com/images-results)
 
-## Examples in Java
+#### Google Images Light
 
-### Search bing
+[See Documentation]()
+
+### Google Lens with File Upload
+
+[See Documentation]()
+
+### Google Trends
+
+[See Documentation]()
+
+### Google Flights
+
+[See Documentation]()
+
+### Google AI Mode API
+
+[See Documentation]()
+
+### Bing Search
+
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -195,151 +254,10 @@ System.out.println(results.toString());
  * source code: [src/test/java/serpapi/example/BingTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/BingTest.java)
 see: [https://serpapi.com/bing-search-api](https://serpapi.com/bing-search-api)
 
-### Search baidu
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
+[See Documentation]()
 
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "baidu");
-parameter.put("q", "coffee");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
+### DuckDuckGo Search
 
- * source code: [src/test/java/serpapi/example/BaiduTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/BaiduTest.java)
-see: [https://serpapi.com/baidu-search-api](https://serpapi.com/baidu-search-api)
-
-### Search yahoo
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "yahoo");
-parameter.put("p", "coffee");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/YahooTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/YahooTest.java)
-see: [https://serpapi.com/yahoo-search-api](https://serpapi.com/yahoo-search-api)
-
-### Search youtube
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "youtube");
-parameter.put("search_query", "coffee");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/YoutubeTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/YoutubeTest.java)
-see: [https://serpapi.com/youtube-search-api](https://serpapi.com/youtube-search-api)
-
-### Search walmart
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "walmart");
-parameter.put("query", "coffee");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/WalmartTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/WalmartTest.java)
-see: [https://serpapi.com/walmart-search-api](https://serpapi.com/walmart-search-api)
-
-### Search ebay
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "ebay");
-parameter.put("_nkw", "coffee");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/EbayTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/EbayTest.java)
-see: [https://serpapi.com/ebay-search-api](https://serpapi.com/ebay-search-api)
-
-### Search naver
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "naver");
-parameter.put("query", "coffee");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/NaverTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/NaverTest.java)
-see: [https://serpapi.com/naver-search-api](https://serpapi.com/naver-search-api)
-
-### Search home depot
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "home_depot");
-parameter.put("q", "table");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/HomeDepotTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/HomeDepotTest.java)
-see: [https://serpapi.com/home-depot-search-api](https://serpapi.com/home-depot-search-api)
-
-### Search apple app store
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "apple_app_store");
-parameter.put("term", "coffee");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/AppleAppStoreTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/AppleAppStoreTest.java)
-see: [https://serpapi.com/apple-app-store](https://serpapi.com/apple-app-store)
-
-### Search duckduckgo
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -357,7 +275,10 @@ System.out.println(results.toString());
  * source code: [src/test/java/serpapi/example/DuckduckgoTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/DuckduckgoTest.java)
 see: [https://serpapi.com/duckduckgo-search-api](https://serpapi.com/duckduckgo-search-api)
 
-### Search google
+[See Documentation]()
+
+### Baidu Search
+
 ```java
 // setup serpapi client
 Map<String, String> auth = new HashMap<>();
@@ -366,306 +287,42 @@ SerpApi client = new SerpApi(auth);
 
 // run search
 Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "google");
-parameter.put("q", "coffee");
-parameter.put("engine", "google");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/GoogleTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleTest.java)
-see: [https://serpapi.com/search-api](https://serpapi.com/search-api)
-
-### Search google scholar
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "google_scholar");
+parameter.put("engine", "baidu");
 parameter.put("q", "coffee");
 JsonObject results = client.search(parameter);
 System.out.println(results.toString());
 ```
 
- * source code: [src/test/java/serpapi/example/GoogleScholarTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleScholarTest.java)
-see: [https://serpapi.com/google-scholar-api](https://serpapi.com/google-scholar-api)
+ * source code: [src/test/java/serpapi/example/BaiduTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/BaiduTest.java)
+see: [https://serpapi.com/baidu-search-api](https://serpapi.com/baidu-search-api)
 
-### Search google autocomplete
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
+[See Documentation]()
 
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "google_autocomplete");
-parameter.put("q", "coffee");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
+### Amazon Search
 
- * source code: [src/test/java/serpapi/example/GoogleAutocompleteTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleAutocompleteTest.java)
-see: [https://serpapi.com/google-autocomplete-api](https://serpapi.com/google-autocomplete-api)
-
-### Search google product
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "google_product");
-parameter.put("q", "coffee");
-parameter.put("product_id", "4887235756540435899");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/GoogleProductTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleProductTest.java)
-
-see: [https://serpapi.com/google-product-api](https://serpapi.com/google-product-api)
-
-### Search google reverse image
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "google_reverse_image");
-parameter.put("image_url", "https://i.imgur.com/5bGzZi7.jpg");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/GoogleReverseImageTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleReverseImageTest.java)
-see: [https://serpapi.com/google-reverse-image](https://serpapi.com/google-reverse-image)
-
-### Search google events
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "google_events");
-parameter.put("q", "Events in Austin, TX");
-JsonObject results = client.search(parameter);
-JsonArray events = results.getAsJsonArray("events_results");
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/GoogleEventsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleEventsTest.java)
-see: [https://serpapi.com/google-events-api](https://serpapi.com/google-events-api)
-
-### Search google maps
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "google_maps");
-parameter.put("q", "pizza");
-parameter.put("ll", "@40.7455096,-74.0083012,15.1z");
-parameter.put("type", "search");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/GoogleMapsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleMapsTest.java)
-see: [https://serpapi.com/google-maps-api](https://serpapi.com/google-maps-api)
-
-### Search google jobs
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "google_jobs");
-parameter.put("q", "coffee");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/GoogleJobsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleJobsTest.java)
-see: [https://serpapi.com/google-jobs-api](https://serpapi.com/google-jobs-api)
-
-### Search google play
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "google_play");
-parameter.put("q", "kite");
-parameter.put("store", "apps");
-JsonObject results = client.search(parameter);
-JsonArray sections = results.getAsJsonArray("organic_results");
-int appCount = 0;
-for (JsonElement section : sections) {
-  JsonObject sectionObj = section.getAsJsonObject();
-  if (sectionObj.has("items") && sectionObj.get("items").isJsonArray()) {
-    appCount += sectionObj.getAsJsonArray("items").size();
-  }
-}
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/GooglePlayTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GooglePlayTest.java)
-see: [https://serpapi.com/google-play-api](https://serpapi.com/google-play-api)
-
-### Search google images
-```java
-// setup serpapi client
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-// run search
-Map<String, String> parameter = new HashMap<>();
-parameter.put("engine", "google_images");
-parameter.put("engine", "google_images");
-parameter.put("tbm", "isch");
-parameter.put("q", "coffee");
-JsonObject results = client.search(parameter);
-System.out.println(results.toString());
-```
-
- * source code: [src/test/java/serpapi/example/GoogleImagesTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleImagesTest.java)
-see: [https://serpapi.com/images-results](https://serpapi.com/images-results)
+[See Documentation]()
 
 
-## Migration from google-search-results-java
+## Documentation
 
-If you are upgrading from the legacy [`google-search-results-java`](https://github.com/serpapi/google-search-results-java) library, here is a summary of what changed.
+SerpApi supports Google Search, Google Maps, Google Shopping, Baidu, Yandex, Yahoo, eBay, Apple App Store, and many other APIs. Browse the [SerpApi](https://serpapi.com/search-api) documentation to find supported APIs and parameters, or use the [Playground](https://serpapi.com/playground) to build a request and generate code.
 
-### Dependency
+Additional SDK resources:
 
-```gradle
-// before
-implementation 'com.github.serpapi:google-search-results-java:2.0.0'
+- [Java SDK integration page]()
+- [Java SDK API reference]()
+- [Java package]()
+- [SerpApi status]()
 
-// after
-implementation 'com.github.serpapi:serpapi-java:1.2.0'
-```
+## Performance
 
-### Class and method renames
+todo fill
 
-| Old (`google-search-results-java`) | New (`serpapi-java`) |
-|------------------------------------|----------------------|
-| `GoogleSearch` | `SerpApi` |
-| `SerpApiSearch` | `SerpApi` |
-| `client.getJson()` | `client.search(parameter)` |
-| `client.getHtml()` | `client.html(parameter)` |
-| — | `client.markdown(parameter)` — new in 1.2.0, see [Markdown output](#markdown-output) |
-| `client.getSearchArchive(id)` | `client.searchArchive(id)` |
-| `client.getAccount()` | `client.account()` |
-| `client.getLocation(parameter)` | `client.location(parameter)` |
-| `SerpApiSearchException` | `SerpApiException` |
-
-### Example
-
-```java
-// before
-Map<String, String> parameter = new HashMap<>();
-parameter.put("q", "coffee");
-parameter.put("api_key", "your_api_key");
-GoogleSearch search = new GoogleSearch(parameter);
-JsonObject results = search.getJson();
-
-// after
-Map<String, String> auth = new HashMap<>();
-auth.put("api_key", "your_api_key");
-SerpApi client = new SerpApi(auth);
-
-Map<String, String> parameter = new HashMap<>();
-parameter.put("q", "coffee");
-parameter.put("engine", "google");
-JsonObject results = client.search(parameter);
-```
+### Key Takeaways
+todo
 
 ### Contributing
 
-We use JUnit, **GitHub Actions** (see [workflow](https://github.com/serpapi/serpapi-java/blob/master/.github/workflows/gradle.yml)), and Gradle.
+Contributions are welcome. Make sure to read our [contributing guide](). 
 
-Run the full test suite locally (integration tests call the live API when a key is present):
-
-```bash
-export SERPAPI_KEY='your_key'   # optional: without it, many tests skip; some tests require the key and will fail if unset
-./gradlew test
-```
-
-Regenerate `README.md` from the template after editing examples:
-
-```bash
-make readme   # requires Ruby `erb`
-```
-
-#### How to build from source
-
-Clone the repository:
-```bash
-git clone https://github.com/serpapi/serpapi-java.git
-cd serpapi-java
-```
-
-Build (use the wrapper):
-```bash
-./gradlew build
-```
-
-The main library JAR is under `build/libs/` (for example `serpapi-1.1.0.jar`, name follows `version` in `build.gradle`). Copy it into your project’s `lib/` directory if you are not using Maven/Gradle dependency resolution.
-
-## TLS / HTTPS and older JVMs
-### Symptom
-
-`javax.net.ssl.SSLHandshakeException`
-
-### Cause
-
-SerpApi is served over **HTTPS (TLS)**. Very old JRE/JDK builds may lack the TLS versions or cipher suites required to connect.
-
-### Solution
-
-Use a **current JDK** (this project is tested on **JDK 21**). On macOS you can select an installed JDK, for example:
-
-```sh
-/usr/libexec/java_home -V
-export JAVA_HOME=$(/usr/libexec/java_home -v 21)
-java -version
-```
-
-On Windows, install a current JDK from your vendor and point `JAVA_HOME` at it.
-
-### Inspiration
- * https://www.baeldung.com/java-http-request
- * https://github.com/google/gson
- 
-## License
-MIT license
-
-## Changelog
-- 1.2.0 — Add markdown support, improve error handling if corrupt data received
-- 1.1.0 — Java 21, Gradle 8.x; ongoing API and example updates
-- 1.0.0 — Revisit API naming and align the client with serpapi.com
-
+© 2026 [SerpApi](https://serpapi.com/)
