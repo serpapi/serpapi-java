@@ -227,6 +227,8 @@ try {
     }
 ```
 
+Source code: [src/test/java/serpapi/example/GoogleShoppingTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleShoppingTest.java)
+
 [See documentation](https://serpapi.com/google-shopping-api)
 
 #### Google Shopping Light
@@ -263,6 +265,8 @@ try {
 }
 ```
 
+Source code: [src/test/java/serpapi/example/GoogleImagesTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleImagesTest.java)
+
 [See documentation](https://serpapi.com/images-results)
 
 #### Google Images Light
@@ -294,6 +298,8 @@ try {
     System.exit(1);
 }
 ```
+
+Source code: [src/test/java/serpapi/example/GoogleLensTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleLensTest.java)
 
 [See Image API documentation](https://serpapi.com/image-api) · [See Google Lens image upload documentation](https://serpapi.com/google-lens-upload-an-image)
 
@@ -333,6 +339,8 @@ try {
 }
 ```
 
+Source code: [src/test/java/serpapi/example/GoogleTrendsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleTrendsTest.java)
+
 [See documentation](https://serpapi.com/google-trends-api)
 
 ### Google Flights
@@ -366,6 +374,7 @@ try {
     System.exit(1);
 }
 ```
+Source code: [src/test/java/serpapi/example/GoogleFlightsTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleFlightsTest.java)
 
 [See documentation](https://serpapi.com/google-flights-api)
 
@@ -392,6 +401,8 @@ try {
     System.exit(1);
 }
 ```
+
+Source code: [src/test/java/serpapi/example/GoogleAIModeTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleAIModeTest.java)
 
 [See documentation](https://serpapi.com/google-ai-mode-api)
 
@@ -421,7 +432,7 @@ try {
 }
 ```
 
- * source code: [src/test/java/serpapi/example/BingTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/BingTest.java)
+Source code: [src/test/java/serpapi/example/BingTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/BingTest.java)
 
 [See documentation](https://serpapi.com/bing-search-api)
 
@@ -450,7 +461,7 @@ try {
 }
 ```
 
- * Source code: [src/test/java/serpapi/example/DuckduckgoTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/DuckduckgoTest.java)
+Source code: [src/test/java/serpapi/example/DuckduckgoTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/DuckduckgoTest.java)
 
 [See documentation](https://serpapi.com/duckduckgo-search-api)
 
@@ -480,7 +491,7 @@ try {
 }
 ```
 
- Source code: [src/test/java/serpapi/example/BaiduTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/BaiduTest.java)
+Source code: [src/test/java/serpapi/example/BaiduTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/BaiduTest.java)
 
 [See documentation](https://serpapi.com/baidu-search-api)
 
@@ -512,6 +523,7 @@ try {
     System.exit(1);
 }
 ```
+Source code: [src/test/java/serpapi/example/AmazonSearchTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/AmazonSearchTest.java)
 
 [See documentation](https://serpapi.com/amazon-search-api)
 
