@@ -106,11 +106,16 @@ public class SerpApiHttp {
    * @return HTTP response body
    * @throws SerpApiException wraps error or connection failures
    */
-  public String postMultipart(Map<String, String> parameter, byte[] image)
+public String postMultipart(Map<String, String> parameter, byte[] image)
       throws SerpApiException {
+    if (parameter == null) {
+      throw new IllegalArgumentException("parameter must not be null");
+    }
+    if (image == null) {
+      throw new IllegalArgumentException("image must not be null");
+    }
     String boundary = "----SerpApiJava" + UUID.randomUUID();
     List<HttpRequest.BodyPublisher> parts = new ArrayList<>();
-
     for (Map.Entry<String, String> field : parameter.entrySet()) {
       validateMultipartToken(field.getKey(), "field name");
       String part = "--" + boundary + "\r\n"
