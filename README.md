@@ -145,6 +145,27 @@ The archived JSON matches the original search result. In tests, the key is suppl
 
 [SerpApiTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/SerpApiTest.java)
 
+### Image API
+
+Upload JPG/JPEG, PNG, or WebP image (up to 500 KB) to use with supported search engines.
+
+```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "<SERPAPI_KEY>");
+SerpApi client = new SerpApi(auth);
+
+JsonObject upload = client.uploadImage(Path.of("/path/to/image.png"));
+
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_lens");
+parameter.put("image_id", upload.get("image_id").getAsString());
+JsonObject results = client.search(parameter);
+```
+
+`uploadImage` also accepts raw image data as a `byte[]`.
+
+Uploaded image IDs expire after 10 minutes. See the [Image API documentation](https://serpapi.com/image-api).
+
 ### Account API
 
 ```java
