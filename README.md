@@ -9,9 +9,10 @@ Integrate search data into your AI workflow, RAG, fine-tuning, or Java applicati
 
 ## Installation 
 
-Using Maven / Gradle.
+Installation of the serpapi-java package is done using Maven / Gradle.
 
-Edit your `build.gradle` file:
+Any new project should include these lines in a `build.gradle` file. 
+
 ```gradle
 repositories {
     maven { url "https://jitpack.io" }
@@ -29,7 +30,7 @@ or you can download the jar file from https://github.com/serpapi/serpapi-java/re
 
 _Note: JitPack builds Maven artifacts from GitHub releases and tags._
 
-## Quickstart
+## Quickstart Tutorial
 
 [Create a SerpApi account](https://serpapi.com/dashboard) to get your API key, then store it in an environment variable:
 
@@ -41,7 +42,12 @@ git clone https://github.com/serpapi/serpapi-java.git
 cd serpapi-java/demo
 make all SERPAPI_KEY='<your private key>'
 ```
-Use quotes if your key contains shell-special characters. You need a SerpApi account to obtain a key: https://serpapi.com/dashboard
+Use quotes if your key contains shell-special characters. 
+
+The `serp-api` package is already installed inside the `build.gradle` file of this cloned `serpapi-java` repository.
+
+So, in this tutorial, no extra setup is needed. 
+For future projects please refer to the above provided 'Installation' section.
 
 `demo/src/main/java/demo/App.java`:
 ```java
@@ -77,7 +83,7 @@ class App {
 
 ## Features
 
-- [Asynchronous searches](https://github.com/serpapi/serpapi-java/commit/75417ff5fe603d19c0a30933251d4bb469ddfe9b) for submitting non-blocking jobs and retrieving completed results from the Search Archive API
+- Asynchronous searches for submitting non-blocking jobs and retrieving completed results from the Search Archive API
 - Persistent connections and connection pooling for reusing HTTP connections across searches
 - Search results stored as a [Gson](https://github.com/google/gson) for JSON and returns responses as Gson `JsonObject` / `JsonArray` with `search`, token-efficient Markdown with `md`, or raw search-engine HTML with `html`
 - SDK methods for the [Image API](https://serpapi.com/image-api), [Location API](https://serpapi.com/locations-api), [Search Archive API](https://serpapi.com/search-archive-api), and [Account API](https://serpapi.com/account-api)
@@ -155,7 +161,7 @@ Search API features non-blocking search using the option: `async=true`.
 - Non-blocking - `async=true` - a single thread can submit many searches without waiting for each one to complete, then collects results later from the Search Archive API.
 - Blocking - `async=false` - each search call blocks the calling thread until results are ready. To run searches concurrently, you'd need multiple threads (i.e. through an `ExecutorService`), each holding its own connection open for the duration of its search. This is more I/O-intensive, since concurrency requires as many held-open connections as concurrent searches.
 
-Here is an example of asynchronous searches using Java:
+Here is an example simulation of asynchronous searches using Java:
  
  ```java
 String apiKey = System.getenv("SERPAPI_KEY");
@@ -177,6 +183,7 @@ for (String company : new String[]{"meta", "amazon", "apple", "netflix", "google
 }
 
 System.out.println("waiting 10s for searches to complete...");
+// for production use cases, continuous polling instead of waiting is necessary
 Thread.sleep(10000);
 
 while (!ids.isEmpty()) {
@@ -528,6 +535,55 @@ Source code: [src/test/java/serpapi/example/AmazonSearchTest.java](https://githu
 [See documentation](https://serpapi.com/amazon-search-api)
 
 
+## Migration from google-search-results-java
+
+If you are upgrading from the legacy [`google-search-results-java`](https://github.com/serpapi/google-search-results-java) library, here is a summary of what changed.
+
+### Dependency
+
+```gradle
+// before
+implementation 'com.github.serpapi:google-search-results-java:2.0.0'
+
+// after
+implementation 'com.github.serpapi:serpapi-java:1.2.0'
+```
+
+### Class and method renames
+
+| Old (`google-search-results-java`) | New (`serpapi-java`) |
+|------------------------------------|----------------------|
+| `GoogleSearch` | `SerpApi` |
+| `SerpApiSearch` | `SerpApi` |
+| `client.getJson()` | `client.search(parameter)` |
+| `client.getHtml()` | `client.html(parameter)` |
+| — | `client.markdown(parameter)` — new in 1.2.0, see [Markdown output](#markdown-output) |
+| `client.getSearchArchive(id)` | `client.searchArchive(id)` |
+| `client.getAccount()` | `client.account()` |
+| `client.getLocation(parameter)` | `client.location(parameter)` |
+| `SerpApiSearchException` | `SerpApiException` |
+
+### Example
+
+```java
+// before
+Map<String, String> parameter = new HashMap<>();
+parameter.put("q", "coffee");
+parameter.put("api_key", "your_api_key");
+GoogleSearch search = new GoogleSearch(parameter);
+JsonObject results = search.getJson();
+
+// after
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", "your_api_key");
+SerpApi client = new SerpApi(auth);
+
+Map<String, String> parameter = new HashMap<>();
+parameter.put("q", "coffee");
+parameter.put("engine", "google");
+JsonObject results = client.search(parameter);
+```
+
 ## Documentation
 
 SerpApi supports Google Search, Google Maps, Google Shopping, Baidu, Yandex, Yahoo, eBay, Apple App Store, and many other APIs. Browse the [SerpApi](https://serpapi.com/search-api) documentation to find supported APIs and parameters, or use the [Playground](https://serpapi.com/playground) to build a request and generate code.
@@ -537,6 +593,31 @@ Additional SDK resources:
 - [Java SDK integration page](https://serpapi.com/integrations/java)
 - [Java package](https://github.com/serpapi/serpapi-java)
 - [SerpApi status](https://serpapi.com/status)
+
+## TLS / HTTPS and older JVMs
+### Symptom
+
+`javax.net.ssl.SSLHandshakeException`
+
+### Cause
+
+SerpApi is served over **HTTPS (TLS)**. Very old JRE/JDK builds may lack the TLS versions or cipher suites required to connect.
+
+### Solution
+
+Use a **current JDK** (this project is tested on **JDK 21**). On macOS you can select an installed JDK, for example:
+
+```sh
+/usr/libexec/java_home -V
+export JAVA_HOME=$(/usr/libexec/java_home -v 21)
+java -version
+```
+
+On Windows, install a current JDK from your vendor and point `JAVA_HOME` at it.
+
+### Inspiration
+ * https://www.baeldung.com/java-http-request
+ * https://github.com/google/gson
 
 ### Contributing
 
