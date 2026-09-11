@@ -29,7 +29,8 @@ public class GoogleJobsTest {
     // run search
     Map<String, String> parameter = new HashMap<>();
     parameter.put("engine", "google_jobs");
-    parameter.put("q", "coffee");
+    parameter.put("q", "barista");
+    parameter.put("location", "Austin, Texas, United States");
     JsonObject results = client.search(parameter);
     assertTrue(results.getAsJsonArray("jobs_results").size() > 5);
   }
