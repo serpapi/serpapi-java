@@ -1,9 +1,7 @@
-package serpapi.example;
-import serpapi.*;
+package serpapi;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -11,26 +9,28 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-public class GoogleJobsTest {
+/**
+ * Test Google Lens has visual matches
+ */
+public class GoogleLensTest {
 
-  @Ignore("google_jobs engine intermittently returns invalid results; not a client bug")
   @Test
   public void search() throws SerpApiException {
     // skip test if no api_key provided
-    if(System.getenv("SERPAPI_KEY") == null)
+    if(System.getenv("API_KEY") == null)
       return;
 
     // setup serpapi client
     Map<String, String> auth = new HashMap<>();
-    auth.put("api_key", System.getenv("SERPAPI_KEY"));
+    auth.put("api_key", System.getenv("API_KEY"));
     SerpApi client = new SerpApi(auth);
 
     // run search
     Map<String, String> parameter = new HashMap<>();
-    parameter.put("engine", "google_jobs");
-    parameter.put("q", "barista");
-    parameter.put("location", "Austin, Texas, United States");
+    parameter.put("engine", "google_lens");
+    parameter.put("url", "https://i.imgur.com/HBrB8p0.png");
     JsonObject results = client.search(parameter);
-    assertTrue(results.getAsJsonArray("jobs_results").size() > 5);
+    assertTrue(results.getAsJsonArray("visual_matches").size() > 1);
   }
+
 }
