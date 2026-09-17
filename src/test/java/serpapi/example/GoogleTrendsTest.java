@@ -23,7 +23,7 @@ public class GoogleTrendsTest {
 
     // setup serpapi client
     Map<String, String> auth = new HashMap<>();
-    auth.put("api_key", System.getenv("API_KEY"));
+    auth.put("api_key", System.getenv("SERPAPI_KEY"));
     SerpApi client = new SerpApi(auth);
 
     // run search
