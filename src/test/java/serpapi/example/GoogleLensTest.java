@@ -10,9 +10,9 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 /**
- * Test main class
+ * Test Google Lens has visual matches
  */
-public class GoogleTest {
+public class GoogleLensTest {
 
   @Test
   public void search() throws SerpApiException {
@@ -27,11 +27,10 @@ public class GoogleTest {
 
     // run search
     Map<String, String> parameter = new HashMap<>();
-    parameter.put("engine", "google");
-    parameter.put("q", "coffee");
-    parameter.put("engine", "google");
+    parameter.put("engine", "google_lens");
+    parameter.put("url", "https://i.imgur.com/HBrB8p0.png");
     JsonObject results = client.search(parameter);
-    assertTrue(results.getAsJsonArray("organic_results").size() > 5);
+    assertTrue(results.getAsJsonArray("visual_matches").size() > 1);
   }
 
 }

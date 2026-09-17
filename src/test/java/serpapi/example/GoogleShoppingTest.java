@@ -10,14 +10,14 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 /**
- * Test main class
+ * Test Google Shopping has shopping results
  */
-public class GoogleTest {
+public class GoogleShoppingTest {
 
   @Test
   public void search() throws SerpApiException {
     // skip test if no api_key provided
-    if(System.getenv("SERPAPI_KEY") == null)
+    if(System.getenv("API_KEY") == null)
       return;
 
     // setup serpapi client
@@ -27,11 +27,10 @@ public class GoogleTest {
 
     // run search
     Map<String, String> parameter = new HashMap<>();
-    parameter.put("engine", "google");
-    parameter.put("q", "coffee");
-    parameter.put("engine", "google");
+    parameter.put("engine", "google_shopping");
+    parameter.put("q", "Macbook M4");
     JsonObject results = client.search(parameter);
-    assertTrue(results.getAsJsonArray("organic_results").size() > 5);
+    assertTrue(results.getAsJsonArray("shopping_results").size() > 1);
   }
 
 }
