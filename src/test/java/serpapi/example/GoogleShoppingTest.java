@@ -1,7 +1,7 @@
-package serpapi;
+package serpapi.example;
+import serpapi.*;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -22,7 +22,7 @@ public class GoogleShoppingTest {
 
     // setup serpapi client
     Map<String, String> auth = new HashMap<>();
-    auth.put("api_key", System.getenv("API_KEY"));
+    auth.put("api_key", System.getenv("SERPAPI_KEY"));
     SerpApi client = new SerpApi(auth);
 
     // run search

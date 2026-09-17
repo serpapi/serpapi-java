@@ -1,7 +1,7 @@
-package serpapi;
+package serpapi.example;
+import serpapi.*;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class GoogleAIModeTest {
   @Test
   public void search() throws SerpApiException {
     // skip test if no api_key provided
-    if(System.getenv("API_KEY") == null)
+    if(System.getenv("SERPAPI_KEY") == null)
       return;
 
     // setup serpapi client

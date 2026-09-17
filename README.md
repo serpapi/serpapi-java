@@ -44,7 +44,7 @@ make all SERPAPI_KEY='<your private key>'
 ```
 Use quotes if your key contains shell-special characters. 
 
-The `serp-api` package is already installed inside the `build.gradle` file of this cloned `serpapi-java` repository.
+The `serpapi-java` package is already installed inside the `build.gradle` file of this cloned `serpapi-java` repository.
 
 So, in this tutorial, no extra setup is needed. 
 For future projects please refer to the above provided 'Installation' section.
@@ -84,10 +84,8 @@ class App {
 ## Features
 
 - Asynchronous searches for submitting non-blocking jobs and retrieving completed results from the Search Archive API
-- Persistent connections and connection pooling for reusing HTTP connections across searches
 - Search results stored as a [Gson](https://github.com/google/gson) for JSON and returns responses as Gson `JsonObject` / `JsonArray` with `search`, token-efficient Markdown with `md`, or raw search-engine HTML with `html`
 - SDK methods for the [Image API](https://serpapi.com/image-api), [Location API](https://serpapi.com/locations-api), [Search Archive API](https://serpapi.com/search-archive-api), and [Account API](https://serpapi.com/account-api)
-- Configurable HTTP timeouts and symbolized or string JSON keys
 
 ## Response Formats
 
@@ -101,17 +99,14 @@ Use `md` for a token-efficient Markdown String optimized for LLMs and AI agents:
 
 Use `html` when you need the raw search-engine response:
 
-```raw_html = client.html(parameter);```
+```rawHtml = client.html(parameter);```
 
 Learn more about [SerpApi Markdown output](https://serpapi.com/markdown-output).
 
-> 
-A couple of notes:
-
-- `client` is a `SerpApi` instance you create with your API key, e.g. `SerpApi client = new SerpApi(auth);` where `auth` is a `Map<String, String>` containing `"api_key"` (and typically `"engine"`).
-- `parameter` is a `Map<String, String>` with your search parameters (`q`, `location`, etc.).
-- `client.markdown(parameter)` is new as of `serpapi-java` **1.2.0** - make sure your `build.gradle` dependency is at least that version
-
+> A couple of notes:
+> - `client` is a `SerpApi` instance you create with your API key, e.g. `SerpApi client = new SerpApi(auth);` where `auth` is a `Map<String, String>` containing `"api_key"` (and typically `"engine"`).
+> - `parameter` is a `Map<String, String>` with your search parameters (`q`, `location`, etc.).
+> - `client.markdown(parameter)` is new as of `serpapi-java` **1.2.0** - make sure your `build.gradle` dependency is at least that version
 
 ## Requirements
 
@@ -124,13 +119,12 @@ This library uses [Gson](https://github.com/google/gson) for JSON and returns re
 ## Configuration
 
 Set defaults when creating a client, then override search parameters in individual calls:
-```java 
+```java
 Map<String, String> auth = new HashMap<>();
 auth.put("api_key", System.getenv("SERPAPI_KEY"));
 auth.put("engine", "google");
 auth.put("hl", "en");
 auth.put("gl", "us");
-auth.put("timeout", "120");
 SerpApi client = new SerpApi(auth);
 
 Map<String, String> parameter = new HashMap<>();
@@ -145,13 +139,11 @@ try {
 }
 ```
 
-| Field | Default | Description |
-| :--- | :---: | :--- |
-|`api_key` | None | Your SerpApi API key. Use an environment variable rather than committing it to source control. | 
-|`engine`| None | The search engine used by default, such as google or google_maps. |
-|`persistent` | true | Reuses the HTTP connection between requests.|
-|`timeout` | 120 | Timeout in seconds for non-persistent HTTP requests. |
-| `async` | false | Submits searches without waiting for them to complete. It can be set on the client or per search. |
+| Field     | Default | Description                                                                                       |
+| :-------- | :-----: | :------------------------------------------------------------------------------------------------ |
+| `api_key` |  None   | Your SerpApi API key. Use an environment variable rather than committing it to source control.    |
+| `engine`  |  None   | The search engine used by default, such as google or google_maps.                                 |
+| `async`   |  false  | Submits searches without waiting for them to complete. It can be set on the client or per search. |
 
 Search-engine-specific parameters can also be supplied when creating the client or calling `search`. Parameters passed to search override client defaults.
 
@@ -198,7 +190,7 @@ This code shows a simple solution to batch searches asynchronously into a [queue
 
 Each search may take a few seconds to complete. By the time the first element pops out of the queue, the search results might already be available in the archive. 
 
-If not, the `search_archive` method blocks until the search results are available.
+If not, the `searchArchive` method blocks until the search results are available.
 
 ## Examples
 
@@ -224,14 +216,14 @@ try {
     JsonObject data = client.search(parameter);
     JsonArray results = data.getAsJsonArray("shopping_results");
     if (results != null && results.size() > 0) {
-            JsonObject first = results.get(0).getAsJsonObject();
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            System.out.println(gson.toJson(first));
-        }   
-    } catch (SerpApiException e) {
+        JsonObject first = results.get(0).getAsJsonObject();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(first));
+    }
+} catch (SerpApiException e) {
         e.printStackTrace();
         System.exit(1);
-    }
+}
 ```
 
 Source code: [src/test/java/serpapi/example/GoogleShoppingTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleShoppingTest.java)
@@ -294,7 +286,7 @@ auth.put("api_key", apiKey);
 SerpApi client = new SerpApi(auth);
 
 Map<String, String> parameter = new HashMap<>();
-parameter.put("url", "https://i.imgur.com/you_image.png");
+parameter.put("url", "https://i.imgur.com/your_image.png");
 
 try {
     JsonObject data = client.search(parameter);
@@ -364,11 +356,14 @@ auth.put("engine", engine);
 auth.put("api_key", apiKey);
 SerpApi client = new SerpApi(auth);
 
+String outboundDate = LocalDate.now().plusDays(7).toString();
+String returnDate = LocalDate.now().plusDays(14).toString();
+
 Map<String, String> parameter = new HashMap<>();
 parameter.put("departure_id", "LAX");
 parameter.put("arrival_id", "AUS");
-parameter.put("outbound_date", "YYYY-MM-DD");
-parameter.put("return_date", "YYYY-MM-DD");
+parameter.put("outbound_date", outboundDate);
+parameter.put("return_date", returnDate);
 
 try {
     JsonObject data = client.search(parameter);
@@ -433,9 +428,8 @@ try {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     System.out.println(gson.toJson(results));
 } catch (SerpApiException e) {
-            e.printStackTrace();
-            System.exit(1);
-
+    e.printStackTrace();
+    System.exit(1);
 }
 ```
 
@@ -463,8 +457,8 @@ try {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     System.out.println(gson.toJson(results));
 } catch (SerpApiException e) {
-            e.printStackTrace();
-            System.exit(1);
+    e.printStackTrace();
+    System.exit(1);
 }
 ```
 
@@ -492,9 +486,8 @@ try {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     System.out.println(gson.toJson(results));
 } catch (SerpApiException e) {
-            e.printStackTrace();
-            System.exit(1);
-
+    e.printStackTrace();
+    System.exit(1);
 }
 ```
 
@@ -523,7 +516,7 @@ parameter.put("amazon_domain", "amazon.com");
 
 try {
     JsonObject data = client.search(parameter);
-     Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    Gson gson = new GsonBuilder().setPrettyPrinting().create();
     System.out.println(gson.toJson(data));
 } catch (SerpApiException e) {
     e.printStackTrace();
@@ -551,17 +544,17 @@ implementation 'com.github.serpapi:serpapi-java:1.2.0'
 
 ### Class and method renames
 
-| Old (`google-search-results-java`) | New (`serpapi-java`) |
-|------------------------------------|----------------------|
-| `GoogleSearch` | `SerpApi` |
-| `SerpApiSearch` | `SerpApi` |
-| `client.getJson()` | `client.search(parameter)` |
-| `client.getHtml()` | `client.html(parameter)` |
-| — | `client.markdown(parameter)` — new in 1.2.0, see [Markdown output](#markdown-output) |
-| `client.getSearchArchive(id)` | `client.searchArchive(id)` |
-| `client.getAccount()` | `client.account()` |
-| `client.getLocation(parameter)` | `client.location(parameter)` |
-| `SerpApiSearchException` | `SerpApiException` |
+| Old (`google-search-results-java`) | New (`serpapi-java`)                                                                 |
+| ---------------------------------- | ------------------------------------------------------------------------------------ |
+| `GoogleSearch`                     | `SerpApi`                                                                            |
+| `SerpApiSearch`                    | `SerpApi`                                                                            |
+| `client.getJson()`                 | `client.search(parameter)`                                                           |
+| `client.getHtml()`                 | `client.html(parameter)`                                                             |
+| —                                  | `client.markdown(parameter)` — new in 1.2.0                                          |
+| `client.getSearchArchive(id)`      | `client.searchArchive(id)`                                                           |
+| `client.getAccount()`              | `client.account()`                                                                   |
+| `client.getLocation(parameter)`    | `client.location(parameter)`                                                         |
+| `SerpApiSearchException`           | `SerpApiException`                                                                   |
 
 ### Example
 
@@ -615,12 +608,12 @@ java -version
 
 On Windows, install a current JDK from your vendor and point `JAVA_HOME` at it.
 
-### Inspiration
+## Inspiration
  * https://www.baeldung.com/java-http-request
  * https://github.com/google/gson
 
-### Contributing
+## Contributing
 
-Contributions are welcome. Make sure to read our [contributing guide](https://github.com/serpapi/serpapi-java/blob/master/CONTRIBUTING.md)). 
+Contributions are welcome. Make sure to read our [contributing guide](https://github.com/serpapi/serpapi-java/blob/master/CONTRIBUTING.md) 
 
 © 2026 [SerpApi](https://serpapi.com/)
