@@ -1,26 +1,3 @@
-<%-
-def snippet(format, path) 
- lines = File.new(path).readlines
-start = lines.find_index { |line| line.include?('// setup serpapi client') }
-if start.nil?
-    raise "No '// setup serpapi client' marker found in #{path}"
-end
-stop = lines.find_index do |line|
-  next false if line.lstrip.start_with?('//')
-  line.match?(/\bassert(True|NotNull)\s*\(/)
-end
-if stop.nil?
-    raise "No assertTrue/assertNotNull found in #{path}"
-end
-slice = lines[start..stop-1]
-slice << "System.out.println(results.toString());"
-buf = slice.map { |l| l.gsub(/(^\s\s\s\s)/, '')}.join
-buf.gsub!("System.getenv(\"SERPAPI_KEY\")", "\"your_api_key\"")
-
- %Q(```#{format}\n#{buf}\n```\n\n * source code: [#{path}](https://github.com/serpapi/serpapi-#{format}/blob/master/#{path}))
-end
--%>
-
 # SerpApi Java Library
 
 [![serpapi-java](https://github.com/serpapi/serpapi-java/actions/workflows/gradle.yml/badge.svg)](https://github.com/serpapi/serpapi-java/actions/workflows/gradle.yml)
@@ -135,7 +112,7 @@ Learn more about [SerpApi Markdown output](https://serpapi.com/markdown-output).
 
 This library uses [Gson](https://github.com/google/gson) for JSON and returns responses as Gson `JsonObject` / `JsonArray`.
 
-**This repository** is built and tested with **JDK 21** and the **Gradle wrapper** (`./gradlew`, currently Gradle 8.5). Use the wrapper so you do not need a separate Gradle install.
+**This repository** is built and tested with **JDK 21** and the **Gradle wrapper** (`./gradlew`, currently Gradle 9.1.0). Use the wrapper so you do not need a separate Gradle install.
 
 **Consumers** of the JitPack artifact should run a JVM whose version is at least the **bytecode level** of the release you depend on (releases from this branch target **Java 21**).
 
