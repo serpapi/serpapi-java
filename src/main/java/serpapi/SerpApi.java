@@ -64,7 +64,7 @@ public class SerpApi {
    * @throws SerpApiException wraps backend error message
    */
   public String html(Map<String, String> parameter) throws SerpApiException {
-    return get("/client", "html", parameter);
+    return get("/search", "html", parameter);
   }
 
   /***
