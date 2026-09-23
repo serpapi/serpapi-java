@@ -17,7 +17,7 @@ public class GoogleShoppingTest {
   @Test
   public void search() throws SerpApiException {
     // skip test if no api_key provided
-    if(System.getenv("API_KEY") == null)
+    if(System.getenv("SERPAPI_KEY") == null)
       return;
 
     // setup serpapi client

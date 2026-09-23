@@ -85,7 +85,7 @@ class App {
 
 - Asynchronous searches for submitting non-blocking jobs and retrieving completed results from the Search Archive API
 - Search results stored as a [Gson](https://github.com/google/gson) for JSON and returns responses as Gson `JsonObject` / `JsonArray` with `search`, token-efficient Markdown with `md`, or raw search-engine HTML with `html`
-- SDK methods for the [Image API](https://serpapi.com/image-api), [Location API](https://serpapi.com/locations-api), [Search Archive API](https://serpapi.com/search-archive-api), and [Account API](https://serpapi.com/account-api)
+- SDK methods for the [Location API](https://serpapi.com/locations-api), [Search Archive API](https://serpapi.com/search-archive-api), and [Account API](https://serpapi.com/account-api)
 
 ## Response Formats
 
@@ -112,7 +112,7 @@ Learn more about [SerpApi Markdown output](https://serpapi.com/markdown-output).
 
 This library uses [Gson](https://github.com/google/gson) for JSON and returns responses as Gson `JsonObject` / `JsonArray`.
 
-**This repository** is built and tested with **JDK 21** and the **Gradle wrapper** (`./gradlew`, currently Gradle 8.5). Use the wrapper so you do not need a separate Gradle install.
+**This repository** is built and tested with **JDK 21** and the **Gradle wrapper** (`./gradlew`, currently Gradle 9.1.0). Use the wrapper so you do not need a separate Gradle install.
 
 **Consumers** of the JitPack artifact should run a JVM whose version is at least the **bytecode level** of the release you depend on (releases from this branch target **Java 21**).
 
@@ -300,7 +300,7 @@ try {
 
 Source code: [src/test/java/serpapi/example/GoogleLensTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleLensTest.java)
 
-[See Image API documentation](https://serpapi.com/image-api) · [See Google Lens image upload documentation](https://serpapi.com/google-lens-upload-an-image)
+[See Google Lens image upload documentation](https://serpapi.com/google-lens-upload-an-image)
 
 ### Google Trends
 
@@ -607,10 +607,6 @@ java -version
 ```
 
 On Windows, install a current JDK from your vendor and point `JAVA_HOME` at it.
-
-## Inspiration
- * https://www.baeldung.com/java-http-request
- * https://github.com/google/gson
 
 ## Contributing
 
