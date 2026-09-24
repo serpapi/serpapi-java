@@ -10,9 +10,9 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 /**
- * Test main class
+ * Test Amazon Search has organic results
  */
-public class GoogleTest {
+public class AmazonSearchTest {
 
   @Test
   public void search() throws SerpApiException {
@@ -27,11 +27,11 @@ public class GoogleTest {
 
     // run search
     Map<String, String> parameter = new HashMap<>();
-    parameter.put("engine", "google");
-    parameter.put("q", "coffee");
-    parameter.put("engine", "google");
+    parameter.put("engine", "amazon");
+    parameter.put("k", "coffee");
+    parameter.put("amazon_domain", "amazon.com");
     JsonObject results = client.search(parameter);
-    assertTrue(results.getAsJsonArray("organic_results").size() > 5);
+    assertTrue(results.getAsJsonArray("organic_results").size() > 1);
   }
 
 }

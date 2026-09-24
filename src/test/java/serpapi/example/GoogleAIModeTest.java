@@ -10,9 +10,9 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 /**
- * Test main class
+ * Test Google AI Mode has a text_blocks response
  */
-public class GoogleTest {
+public class GoogleAIModeTest {
 
   @Test
   public void search() throws SerpApiException {
@@ -27,11 +27,10 @@ public class GoogleTest {
 
     // run search
     Map<String, String> parameter = new HashMap<>();
-    parameter.put("engine", "google");
-    parameter.put("q", "coffee");
-    parameter.put("engine", "google");
+    parameter.put("engine", "google_ai_mode");
+    parameter.put("q", "best coffee maker");
     JsonObject results = client.search(parameter);
-    assertTrue(results.getAsJsonArray("organic_results").size() > 5);
+    assertTrue(results.getAsJsonArray("text_blocks").size() > 0);
   }
 
 }

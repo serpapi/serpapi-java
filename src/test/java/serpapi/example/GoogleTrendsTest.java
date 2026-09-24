@@ -2,6 +2,7 @@ package serpapi.example;
 import serpapi.*;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonArray;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -10,9 +11,9 @@ import java.util.Map;
 import static org.junit.Assert.*;
 
 /**
- * Test main class
+ * Test Google Trends has timeline data
  */
-public class GoogleTest {
+public class GoogleTrendsTest {
 
   @Test
   public void search() throws SerpApiException {
@@ -27,11 +28,16 @@ public class GoogleTest {
 
     // run search
     Map<String, String> parameter = new HashMap<>();
-    parameter.put("engine", "google");
+    parameter.put("engine", "google_trends");
     parameter.put("q", "coffee");
-    parameter.put("engine", "google");
+    parameter.put("data_type", "TIMESERIES");
     JsonObject results = client.search(parameter);
-    assertTrue(results.getAsJsonArray("organic_results").size() > 5);
+
+    JsonObject interestOverTime = results.getAsJsonObject("interest_over_time");
+    assertNotNull(interestOverTime);
+
+    JsonArray timelineData = interestOverTime.getAsJsonArray("timeline_data");
+    assertTrue(timelineData.size() > 1);
   }
 
 }
