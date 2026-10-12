@@ -30,7 +30,7 @@ or you can download the jar file from https://github.com/serpapi/serpapi-java/re
 
 _Note: JitPack builds Maven artifacts from GitHub releases and tags._
 
-## Quickstart Tutorial
+## Quick start
 
 [Create a SerpApi account](https://serpapi.com/dashboard) to get your API key, then store it in an environment variable:
 
@@ -147,7 +147,7 @@ try {
 
 Search-engine-specific parameters can also be supplied when creating the client or calling `search`. Parameters passed to search override client defaults.
 
-### Search Asynchronous
+### Asynchronous searches
 Search API features non-blocking search using the option: `async=true`.
 
 - Non-blocking - `async=true` - a single thread can submit many searches without waiting for each one to complete, then collects results later from the Search Archive API.
