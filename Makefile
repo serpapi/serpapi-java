@@ -1,6 +1,6 @@
 .PHONY: build
 
-all: clean init build test readme doc
+all: clean init build test doc
 
 # clean
 clean:
@@ -28,10 +28,6 @@ build: clean
 # Build the demo project
 oobt: build
 	$(MAKE) -C demo all
-
-# Ruby must be installed (ERB is located under $GEM_HOME/bin or under Ruby installation)
-readme:
-	erb -T '-' README.md.erb > README.md
 
 # Build the javadoc
 doc:
