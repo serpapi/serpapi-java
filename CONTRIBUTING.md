@@ -25,11 +25,7 @@ export SERPAPI_KEY='your_key'   # optional: without it, many tests skip; some te
 ./gradlew test
 ```
 
-Regenerate README.md from the template after editing examples:
-
-```bash
-make readme   # requires Ruby `erb`
-```
+README.md is maintained by hand. When you change an example under `src/test/java/serpapi/example/`, update its snippet in README.md too.
 
 How to build from source
 Clone the repository:

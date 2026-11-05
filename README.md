@@ -26,7 +26,7 @@ dependencies {
 To list all available versions see:
 https://jitpack.io/api/builds/com.github.serpapi/serpapi-java
 
-or you can download the jar file from https://github.com/serpapi/serpapi-java/releases.
+Or you can download the JAR file from https://github.com/serpapi/serpapi-java/releases.
 
 _Note: JitPack builds Maven artifacts from GitHub releases and tags._
 
@@ -598,7 +598,7 @@ SerpApi is served over **HTTPS (TLS)**. Very old JRE/JDK builds may lack the TLS
 
 ### Solution
 
-Use a **current JDK** (this project is tested on **JDK 21**). On macOS you can select an installed JDK, for example:
+Use a **current JDK** (this project is tested on **JDK 21**). On macOS, you can select an installed JDK, for example:
 
 ```sh
 /usr/libexec/java_home -V
@@ -606,7 +606,7 @@ export JAVA_HOME=$(/usr/libexec/java_home -v 21)
 java -version
 ```
 
-On Windows, install a current JDK from your vendor and point `JAVA_HOME` at it.
+On Windows, install a current JDK from your vendor and point `JAVA_HOME` to it.
 
 ## Contributing
 
