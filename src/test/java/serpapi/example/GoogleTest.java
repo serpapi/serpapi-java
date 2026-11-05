@@ -2,7 +2,6 @@ package serpapi.example;
 import serpapi.*;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import org.junit.Test;
 
 import java.util.HashMap;
