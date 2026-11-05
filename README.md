@@ -85,7 +85,7 @@ class App {
 
 - Asynchronous searches for submitting non-blocking jobs and retrieving completed results from the Search Archive API
 - Search results stored as a [Gson](https://github.com/google/gson) for JSON and returns responses as Gson `JsonObject` / `JsonArray` with `search`, token-efficient Markdown with `md`, or raw search-engine HTML with `html`
-- SDK methods for the [Location API](https://serpapi.com/locations-api), [Search Archive API](https://serpapi.com/search-archive-api), and [Account API](https://serpapi.com/account-api)
+- SDK methods for the [Location API](https://serpapi.com/locations-api), [Search Archive API](https://serpapi.com/search-archive-api), [Image API](https://serpapi.com/image-api), and [Account API](https://serpapi.com/account-api)
 
 ## Response Formats
 
@@ -301,6 +301,27 @@ try {
 Source code: [src/test/java/serpapi/example/GoogleLensTest.java](https://github.com/serpapi/serpapi-java/blob/master/src/test/java/serpapi/example/GoogleLensTest.java)
 
 [See Google Lens image upload documentation](https://serpapi.com/google-lens-upload-an-image)
+
+#### Image API
+
+Upload a JPG/JPEG, PNG, or WebP image (up to 500 KB) to use with supported search engines.
+
+```java
+Map<String, String> auth = new HashMap<>();
+auth.put("api_key", System.getenv("SERPAPI_KEY"));
+SerpApi client = new SerpApi(auth);
+
+JsonObject upload = client.uploadImage(Path.of("/path/to/image.png"));
+
+Map<String, String> parameter = new HashMap<>();
+parameter.put("engine", "google_lens");
+parameter.put("image_id", upload.get("image_id").getAsString());
+JsonObject results = client.search(parameter);
+```
+
+`uploadImage` also accepts raw image data as a `byte[]`.
+
+Uploaded image IDs expire after 10 minutes. See the [Image API documentation](https://serpapi.com/image-api).
 
 ### Google Trends
 

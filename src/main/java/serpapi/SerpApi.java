@@ -5,6 +5,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -92,6 +95,78 @@ public class SerpApi {
     return json("/search", parameter);
   }
 
+  /**
+   * Upload an image to the Image API.
+   *
+   * <p>The returned {@code image_id} can be supplied to engines that support
+   * uploaded images, such as Google Lens. Uploaded images expire after 10
+   * minutes. Supported formats are JPG/JPEG, PNG, and WebP, up to 500 KB.</p>
+   *
+   * @param image local image path
+   * @return response containing the temporary {@code image_id}
+   * @throws SerpApiException wraps backend or connection errors
+   */
+  public JsonObject uploadImage(Path image) throws SerpApiException {
+    return uploadImage(image, null);
+  }
+
+  /**
+   * Upload an image with additional multipart form fields. A custom
+   * {@code api_key} in {@code parameter} overrides the constructor API key.
+   *
+   * @param image local image path
+   * @param parameter additional Image API fields
+   * @return response containing the temporary {@code image_id}
+   * @throws SerpApiException wraps backend or connection errors
+   */
+  public JsonObject uploadImage(Path image, Map<String, String> parameter) throws SerpApiException {
+    if (image == null) {
+      throw new IllegalArgumentException("image must not be null");
+    }
+    try {
+      return uploadImage(Files.readAllBytes(image), parameter);
+    } catch (IOException e) {
+      throw new SerpApiException(e);
+    }
+  }
+
+  /**
+   * Upload raw image data to the Image API.
+   *
+   * @param image raw image data
+   * @return response containing the temporary {@code image_id}
+   * @throws SerpApiException wraps backend or connection errors
+   */
+  public JsonObject uploadImage(byte[] image) throws SerpApiException {
+    return uploadImage(image, null);
+  }
+
+  /**
+   * Upload raw image data with additional multipart form fields. A custom
+   * {@code api_key} in {@code parameter} overrides the constructor API key.
+   *
+   * @param image raw image data
+   * @param parameter additional Image API fields
+   * @return response containing the temporary {@code image_id}
+   * @throws SerpApiException wraps backend or connection errors
+   */
+  public JsonObject uploadImage(byte[] image, Map<String, String> parameter)
+      throws SerpApiException {
+    if (image == null) {
+      throw new IllegalArgumentException("image must not be null");
+    }
+    Map<String, String> form = new HashMap<>();
+    if (this.parameter.containsKey("api_key")) {
+      form.put("api_key", this.parameter.get("api_key"));
+    }
+    if (parameter != null) {
+      form.putAll(parameter);
+    }
+
+    this.client.path = "/image";
+    return parseJson(this.client.postMultipart(form, image));
+  }
+
   /***
    * Return location using Location API
    * 
@@ -148,7 +223,10 @@ public class SerpApi {
    * @return JsonObject created by gson parser
    */
   private JsonObject json(String endpoint, Map<String, String> parameter) throws SerpApiException {
-    String content = get(endpoint, "json", parameter);
+    return parseJson(get(endpoint, "json", parameter));
+  }
+
+  private JsonObject parseJson(String content) throws SerpApiException {
     JsonElement element = gson.fromJson(content, JsonElement.class);
     JsonObject result = element.getAsJsonObject();
     // SerpApi reports some failures in the body of an HTTP 200 response, so the
